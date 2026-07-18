@@ -70,29 +70,17 @@ const GALLERY_DATA: GalleryItem[] = [
     title: 'Book Self Holder - Classic Edition',
     category: 'BOOK SELF HOLDER',
     description: 'Elegant book self holder perfect for corporate gifting.',
-    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173613.jpg'
+    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173717.jpg'
   },
-  {
-    id: 'bsh-2',
-    title: 'Book Self Holder - Premium Version',
-    category: 'BOOK SELF HOLDER',
-    description: 'Premium quality book self holder with wooden finish.',
-    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173637.jpg'
-  },
+  
   {
     id: 'bsh-3',
     title: 'Book Self Holder - Deluxe Model',
     category: 'BOOK SELF HOLDER',
     description: 'Deluxe book self holder with premium wooden base.',
-    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173703.jpg'
+    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173613.eJtRfRnx.jpg'
   },
-  {
-    id: 'bsh-4',
-    title: 'Book Self Holder - Executive Series',
-    category: 'BOOK SELF HOLDER',
-    description: 'Executive series book self holder for top management.',
-    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173717.jpg'
-  },
+ 
   {
     id: 'bsh-5',
     title: 'Book Self Holder - Signature Collection',
