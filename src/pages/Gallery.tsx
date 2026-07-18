@@ -1,6 +1,6 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, ZoomIn, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, X, ZoomIn, ChevronDown, ChevronLeft, ChevronRight, Grid, List, Image as ImageIcon, Loader2 } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import PageHero from '../components/sections/PageHero';
 
@@ -10,36 +10,36 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.05,
+      staggerChildren: 0.03,
       delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, scale: 0.9 },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: 'easeOut' },
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] },
   },
   exit: {
     opacity: 0,
-    y: -20,
+    scale: 0.8,
     transition: { duration: 0.2 },
   },
 };
 
 const modalVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
+  hidden: { opacity: 0, scale: 0.8 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.3, ease: 'easeOut' },
+    transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
   },
   exit: {
     opacity: 0,
-    scale: 0.9,
+    scale: 0.8,
     transition: { duration: 0.2 },
   },
 };
@@ -60,1673 +60,1336 @@ interface SelectedItem {
   image: string;
 }
 
-// ----- MANUAL GALLERY DATA - ALL 44 CATEGORIES WITH 5 IMAGES EACH -----
+// ===== COMPLETE GALLERY DATA - 35 CATEGORIES WITH 5 IMAGES EACH =====
 const GALLERY_DATA: GalleryItem[] = [
-  // ===== Corporate & Executive Gifts =====
-  
-  // 1. BOOK SELF HOLDER
+  // ===== 1. BOOKSELFHOLDER =====
   {
     id: 'bsh-1',
-    title: 'Book Self Holder - Classic Edition',
-    category: 'BOOK SELF HOLDER',
-    description: 'Elegant book self holder perfect for corporate gifting.',
+    title: 'Classic Book Self Holder',
+    category: 'BOOKSELFHOLDER',
+    description: 'Elegant book self holder with premium wooden finish, perfect for corporate gifting.',
     image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173717.jpg'
   },
-  
   {
-    id: 'bsh-3',
-    title: 'Book Self Holder - Deluxe Model',
-    category: 'BOOK SELF HOLDER',
-    description: 'Deluxe book self holder with premium wooden base.',
+    id: 'bsh-2',
+    title: 'Premium Book Self Holder',
+    category: 'BOOKSELFHOLDER',
+    description: 'Premium book self holder with exquisite craftsmanship and durable build.',
     image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173613.eJtRfRnx.jpg'
   },
- 
   {
-    id: 'bsh-5',
-    title: 'Book Self Holder - Signature Collection',
-    category: 'BOOK SELF HOLDER',
-    description: 'Signature collection book self holder with gold accents.',
+    id: 'bsh-3',
+    title: 'Deluxe Book Self Holder',
+    category: 'BOOKSELFHOLDER',
+    description: 'Deluxe edition with elegant wooden base and superior finishing.',
     image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/20260210_173727.jpg'
   },
+  {
+    id: 'bsh-4',
+    title: 'Executive Book Self Holder',
+    category: 'BOOKSELFHOLDER',
+    description: 'Executive series with sophisticated design and premium materials.',
+    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/executive-bookshelf.jpg'
+  },
+  {
+    id: 'bsh-5',
+    title: 'Signature Book Self Holder',
+    category: 'BOOKSELFHOLDER',
+    description: 'Signature collection featuring unique design and gold accents.',
+    image: '/PRODUCT CATEGORY/BOOKSELFHOLDER/signature-bookshelf.jpg'
+  },
 
-  // 2. BOWLS
+  // ===== 2. BOWL =====
   {
     id: 'bowl-1',
-    title: 'Bowl - Classic Edition',
-    category: 'BOWLS',
-    description: 'Genuine bowl for professionals.',
+    title: 'Classic Decorative Bowl',
+    category: 'BOWL',
+    description: 'Elegant decorative bowl perfect for professional settings.',
     image: '/PRODUCT CATEGORY/BOWL/20260211_131532.jpg'
   },
   {
     id: 'bowl-2',
-    title: 'Bowl - Premium Version',
-    category: 'BOWLS',
-    description: 'Premium bowl with multiple compartments.',
+    title: 'Premium Serving Bowl',
+    category: 'BOWL',
+    description: 'Premium bowl with multiple compartments for versatile use.',
     image: '/PRODUCT CATEGORY/BOWL/20260211_131545.jpg'
   },
   {
     id: 'bowl-3',
-    title: 'Bowl - Deluxe Model',
-    category: 'BOWLS',
-    description: 'Deluxe bowl with zipper closure.',
+    title: 'Deluxe Crystal Bowl',
+    category: 'BOWL',
+    description: 'Deluxe crystal bowl with elegant design and premium finish.',
     image: '/PRODUCT CATEGORY/BOWL/20260211_132010.jpg'
   },
   {
     id: 'bowl-4',
-    title: 'Bowl - Executive Series',
-    category: 'BOWLS',
-    description: 'Executive series portfolio with embossed logo.',
+    title: 'Executive Collection Bowl',
+    category: 'BOWL',
+    description: 'Executive series bowl crafted with premium materials.',
     image: '/PRODUCT CATEGORY/BOWL/20260211_132115.jpg'
   },
   {
     id: 'bowl-5',
-    title: 'Bowl - Signature Collection',
-    category: 'BOWLS',
-    description: 'Signature collection bowl with premium finish.',
-    image: '/PRODUCT CATEGORY/BOWL/20260211_132120.jpg'
+    title: 'Signature Designer Bowl',
+    category: 'BOWL',
+    description: 'Signature collection bowl with unique artistic design.',
+    image: '/PRODUCT CATEGORY/BOWL/signature-bowl.jpg'
   },
 
-  // 3. PEN SETS
+  // ===== 3. CERTIFICATE =====
   {
-    id: 'ps-1',
-    title: 'Pen Set - Classic Edition',
-    category: 'PEN SETS',
-    description: 'Elegant pen set with wooden stand.',
-    image: '/images/gallery/pen-sets/20260210_173623.jpg'
+    id: 'cert-1',
+    title: 'Classic Certificate Frame',
+    category: 'CERTIFICATE',
+    description: 'Premium certificate frame for displaying awards and achievements.',
+    image: '/PRODUCT CATEGORY/CERTIFICATE/20260211_145909.jpg'
   },
   {
-    id: 'ps-2',
-    title: 'Pen Set - Premium Version',
-    category: 'PEN SETS',
-    description: 'Premium pen set with gold finish.',
-    image: '/images/gallery/pen-sets/20260210_173624.jpg'
+    id: 'cert-2',
+    title: 'Premium Certificate Frame',
+    category: 'CERTIFICATE',
+    description: 'Elegant certificate frame with refined finish and gold accents.',
+    image: '/PRODUCT CATEGORY/CERTIFICATE/20260211_150302.jpg'
   },
   {
-    id: 'ps-3',
-    title: 'Pen Set - Deluxe Model',
-    category: 'PEN SETS',
-    description: 'Deluxe pen set with marble base.',
-    image: '/images/gallery/pen-sets/20260210_173625.jpg'
+    id: 'cert-3',
+    title: 'Deluxe Certificate Display',
+    category: 'CERTIFICATE',
+    description: 'Deluxe display frame with premium glass and wooden backing.',
+    image: '/PRODUCT CATEGORY/CERTIFICATE/20260211_150318.jpg'
   },
   {
-    id: 'ps-4',
-    title: 'Pen Set - Executive Series',
-    category: 'PEN SETS',
-    description: 'Executive series pen set with gift box.',
-    image: '/images/gallery/pen-sets/20260210_173626.jpg'
+    id: 'cert-4',
+    title: 'Executive Certificate Frame',
+    category: 'CERTIFICATE',
+    description: 'Executive series frame with sophisticated design.',
+    image: '/PRODUCT CATEGORY/CERTIFICATE/executive-cert.jpg'
   },
   {
-    id: 'ps-5',
-    title: 'Pen Set - Signature Collection',
-    category: 'PEN SETS',
-    description: 'Signature collection pen set with personalized engraving.',
-    image: '/images/gallery/pen-sets/20260210_173627.jpg'
-  },
-
-  // 4. BUSINESS CARD HOLDERS
-  {
-    id: 'bch-1',
-    title: 'Business Card Holder - Classic Edition',
-    category: 'BUSINESS CARD HOLDERS',
-    description: 'Elegant business card holder for professionals.',
-    image: '/images/gallery/business-card-holders/20260210_173628.jpg'
-  },
-  {
-    id: 'bch-2',
-    title: 'Business Card Holder - Premium Version',
-    category: 'BUSINESS CARD HOLDERS',
-    description: 'Premium card holder with leather finish.',
-    image: '/images/gallery/business-card-holders/20260210_173629.jpg'
-  },
-  {
-    id: 'bch-3',
-    title: 'Business Card Holder - Deluxe Model',
-    category: 'BUSINESS CARD HOLDERS',
-    description: 'Deluxe card holder with metal accents.',
-    image: '/images/gallery/business-card-holders/20260210_173630.jpg'
-  },
-  {
-    id: 'bch-4',
-    title: 'Business Card Holder - Executive Series',
-    category: 'BUSINESS CARD HOLDERS',
-    description: 'Executive series card holder with logo engraving.',
-    image: '/images/gallery/business-card-holders/20260210_173631.jpg'
-  },
-  {
-    id: 'bch-5',
-    title: 'Business Card Holder - Signature Collection',
-    category: 'BUSINESS CARD HOLDERS',
-    description: 'Signature collection card holder with premium finish.',
-    image: '/images/gallery/business-card-holders/20260210_173632.jpg'
+    id: 'cert-5',
+    title: 'Signature Certificate Frame',
+    category: 'CERTIFICATE',
+    description: 'Signature collection frame with premium finishing.',
+    image: '/PRODUCT CATEGORY/CERTIFICATE/signature-cert.jpg'
   },
 
-  // 5. DESK ORGANIZERS
+  // ===== 4. CHESS BOARD =====
   {
-    id: 'do-1',
-    title: 'Desk Organizer - Classic Edition',
-    category: 'DESK ORGANIZERS',
-    description: 'Elegant desk organizer for office use.',
-    image: '/images/gallery/desk-organizers/20260210_173633.jpg'
+    id: 'chess-1',
+    title: 'Classic Wooden Chess Board',
+    category: 'CHESS BOARD',
+    description: 'Elegant wooden chess board for professionals and enthusiasts.',
+    image: '/PRODUCT CATEGORY/CHESS BOARD/chess1.jpg'
   },
   {
-    id: 'do-2',
-    title: 'Desk Organizer - Premium Version',
-    category: 'DESK ORGANIZERS',
-    description: 'Premium organizer with multiple compartments.',
-    image: '/images/gallery/desk-organizers/20260210_173634.jpg'
+    id: 'chess-2',
+    title: 'Premium Carved Chess Board',
+    category: 'CHESS BOARD',
+    description: 'Premium chess board with intricately carved pieces.',
+    image: '/PRODUCT CATEGORY/CHESS BOARD/chess2.jpg'
   },
   {
-    id: 'do-3',
-    title: 'Desk Organizer - Deluxe Model',
-    category: 'DESK ORGANIZERS',
-    description: 'Deluxe organizer with wooden finish.',
-    image: '/images/gallery/desk-organizers/20260210_173635.jpg'
+    id: 'chess-3',
+    title: 'Deluxe Marble Chess Board',
+    category: 'CHESS BOARD',
+    description: 'Deluxe chess board with elegant marble finish.',
+    image: '/PRODUCT CATEGORY/CHESS BOARD/chess3.jpg'
   },
   {
-    id: 'do-4',
-    title: 'Desk Organizer - Executive Series',
-    category: 'DESK ORGANIZERS',
-    description: 'Executive series organizer with drawer.',
-    image: '/images/gallery/desk-organizers/20260210_173636.jpg'
+    id: 'chess-4',
+    title: 'Executive Chess Set',
+    category: 'CHESS BOARD',
+    description: 'Executive series chess set with premium wooden pieces.',
+    image: '/PRODUCT CATEGORY/CHESS BOARD/executive-chess.jpg'
   },
   {
-    id: 'do-5',
-    title: 'Desk Organizer - Signature Collection',
-    category: 'DESK ORGANIZERS',
-    description: 'Signature collection organizer with premium materials.',
-    image: '/images/gallery/desk-organizers/20260210_173637.jpg'
-  },
-
-  // ===== Wooden & Bamboo Products =====
-
-  // 6. WOODEN CLOCKS
-  {
-    id: 'wc-1',
-    title: 'Wooden Clock - Classic Edition',
-    category: 'WOODEN CLOCKS',
-    description: 'Elegant wooden clock for office decor.',
-    image: '/images/gallery/wooden-clocks/20260210_173638.jpg'
-  },
-  {
-    id: 'wc-2',
-    title: 'Wooden Clock - Premium Version',
-    category: 'WOODEN CLOCKS',
-    description: 'Premium wooden clock with roman numerals.',
-    image: '/images/gallery/wooden-clocks/20260210_173639.jpg'
-  },
-  {
-    id: 'wc-3',
-    title: 'Wooden Clock - Deluxe Model',
-    category: 'WOODEN CLOCKS',
-    description: 'Deluxe wooden clock with pendulum.',
-    image: '/images/gallery/wooden-clocks/20260210_173640.jpg'
-  },
-  {
-    id: 'wc-4',
-    title: 'Wooden Clock - Executive Series',
-    category: 'WOODEN CLOCKS',
-    description: 'Executive series clock with modern design.',
-    image: '/images/gallery/wooden-clocks/20260210_173641.jpg'
-  },
-  {
-    id: 'wc-5',
-    title: 'Wooden Clock - Signature Collection',
-    category: 'WOODEN CLOCKS',
-    description: 'Signature collection clock with premium finish.',
-    image: '/images/gallery/wooden-clocks/20260210_173642.jpg'
+    id: 'chess-5',
+    title: 'Signature Chess Collection',
+    category: 'CHESS BOARD',
+    description: 'Signature collection featuring handcrafted pieces.',
+    image: '/PRODUCT CATEGORY/CHESS BOARD/signature-chess.jpg'
   },
 
-  // 7. BAMBOO DESK ACCESSORIES
+  // ===== 5. COMPLETE DESK ORGANISER =====
   {
-    id: 'bda-1',
-    title: 'Bamboo Desk Accessory - Classic Edition',
-    category: 'BAMBOO DESK ACCESSORIES',
-    description: 'Eco-friendly bamboo desk accessory set.',
-    image: '/images/gallery/bamboo-desk-accessories/20260210_173643.jpg'
+    id: 'cdo-1',
+    title: 'Classic Desk Organiser',
+    category: 'COMPLETE DESK ORGANISER',
+    description: 'Complete desk organiser for efficient workspace management.',
+    image: '/PRODUCT CATEGORY/COMPLETE DESK ORGANISER/cdo1.jpg'
   },
   {
-    id: 'bda-2',
-    title: 'Bamboo Desk Accessory - Premium Version',
-    category: 'BAMBOO DESK ACCESSORIES',
-    description: 'Premium bamboo accessories for office.',
-    image: '/images/gallery/bamboo-desk-accessories/20260210_173644.jpg'
+    id: 'cdo-2',
+    title: 'Premium Desk Organiser',
+    category: 'COMPLETE DESK ORGANISER',
+    description: 'Premium organiser with multiple sections and premium finish.',
+    image: '/PRODUCT CATEGORY/COMPLETE DESK ORGANISER/cdo2.jpg'
   },
   {
-    id: 'bda-3',
-    title: 'Bamboo Desk Accessory - Deluxe Model',
-    category: 'BAMBOO DESK ACCESSORIES',
-    description: 'Deluxe bamboo set with organizer.',
-    image: '/images/gallery/bamboo-desk-accessories/20260210_173645.jpg'
+    id: 'cdo-3',
+    title: 'Deluxe Office Organiser',
+    category: 'COMPLETE DESK ORGANISER',
+    description: 'Deluxe organiser with wooden compartments and sleek design.',
+    image: '/PRODUCT CATEGORY/COMPLETE DESK ORGANISER/deluxe-cdo.jpg'
   },
   {
-    id: 'bda-4',
-    title: 'Bamboo Desk Accessory - Executive Series',
-    category: 'BAMBOO DESK ACCESSORIES',
-    description: 'Executive series bamboo accessories.',
-    image: '/images/gallery/bamboo-desk-accessories/20260210_173646.jpg'
+    id: 'cdo-4',
+    title: 'Executive Desk System',
+    category: 'COMPLETE DESK ORGANISER',
+    description: 'Executive system with comprehensive organisation features.',
+    image: '/PRODUCT CATEGORY/COMPLETE DESK ORGANISER/executive-cdo.jpg'
   },
   {
-    id: 'bda-5',
-    title: 'Bamboo Desk Accessory - Signature Collection',
-    category: 'BAMBOO DESK ACCESSORIES',
-    description: 'Signature collection with premium bamboo.',
-    image: '/images/gallery/bamboo-desk-accessories/20260210_173647.jpg'
-  },
-
-  // 8. WOODEN COASTERS
-  {
-    id: 'wco-1',
-    title: 'Wooden Coaster - Classic Edition',
-    category: 'WOODEN COASTERS',
-    description: 'Elegant wooden coaster set for office.',
-    image: '/images/gallery/wooden-coasters/20260210_173648.jpg'
-  },
-  {
-    id: 'wco-2',
-    title: 'Wooden Coaster - Premium Version',
-    category: 'WOODEN COASTERS',
-    description: 'Premium coaster set with engraved designs.',
-    image: '/images/gallery/wooden-coasters/20260210_173649.jpg'
-  },
-  {
-    id: 'wco-3',
-    title: 'Wooden Coaster - Deluxe Model',
-    category: 'WOODEN COASTERS',
-    description: 'Deluxe coasters with holder.',
-    image: '/images/gallery/wooden-coasters/20260210_173650.jpg'
-  },
-  {
-    id: 'wco-4',
-    title: 'Wooden Coaster - Executive Series',
-    category: 'WOODEN COASTERS',
-    description: 'Executive series coasters with logo.',
-    image: '/images/gallery/wooden-coasters/20260210_173651.jpg'
-  },
-  {
-    id: 'wco-5',
-    title: 'Wooden Coaster - Signature Collection',
-    category: 'WOODEN COASTERS',
-    description: 'Signature collection coasters with premium finish.',
-    image: '/images/gallery/wooden-coasters/20260210_173652.jpg'
+    id: 'cdo-5',
+    title: 'Signature Desk Organiser',
+    category: 'COMPLETE DESK ORGANISER',
+    description: 'Signature collection with premium materials and design.',
+    image: '/PRODUCT CATEGORY/COMPLETE DESK ORGANISER/signature-cdo.jpg'
   },
 
-  // 9. WOODEN PHOTO FRAMES
-  {
-    id: 'wpf-1',
-    title: 'Wooden Photo Frame - Classic Edition',
-    category: 'WOODEN PHOTO FRAMES',
-    description: 'Elegant wooden photo frame for desk.',
-    image: '/images/gallery/wooden-photo-frames/20260210_173653.jpg'
-  },
-  {
-    id: 'wpf-2',
-    title: 'Wooden Photo Frame - Premium Version',
-    category: 'WOODEN PHOTO FRAMES',
-    description: 'Premium frame with carved details.',
-    image: '/images/gallery/wooden-photo-frames/20260210_173654.jpg'
-  },
-  {
-    id: 'wpf-3',
-    title: 'Wooden Photo Frame - Deluxe Model',
-    category: 'WOODEN PHOTO FRAMES',
-    description: 'Deluxe frame with gold accents.',
-    image: '/images/gallery/wooden-photo-frames/20260210_173655.jpg'
-  },
-  {
-    id: 'wpf-4',
-    title: 'Wooden Photo Frame - Executive Series',
-    category: 'WOODEN PHOTO FRAMES',
-    description: 'Executive series frame with engraving.',
-    image: '/images/gallery/wooden-photo-frames/20260210_173656.jpg'
-  },
-  {
-    id: 'wpf-5',
-    title: 'Wooden Photo Frame - Signature Collection',
-    category: 'WOODEN PHOTO FRAMES',
-    description: 'Signature collection frame with premium wood.',
-    image: '/images/gallery/wooden-photo-frames/20260210_173657.jpg'
-  },
-
-  // 10. WOODEN TRAYS
-  {
-    id: 'wt-1',
-    title: 'Wooden Tray - Classic Edition',
-    category: 'WOODEN TRAYS',
-    description: 'Elegant wooden serving tray.',
-    image: '/images/gallery/wooden-trays/20260210_173658.jpg'
-  },
-  {
-    id: 'wt-2',
-    title: 'Wooden Tray - Premium Version',
-    category: 'WOODEN TRAYS',
-    description: 'Premium tray with carved handles.',
-    image: '/images/gallery/wooden-trays/20260210_173659.jpg'
-  },
-  {
-    id: 'wt-3',
-    title: 'Wooden Tray - Deluxe Model',
-    category: 'WOODEN TRAYS',
-    description: 'Deluxe tray with inlay design.',
-    image: '/images/gallery/wooden-trays/20260210_173700.jpg'
-  },
-  {
-    id: 'wt-4',
-    title: 'Wooden Tray - Executive Series',
-    category: 'WOODEN TRAYS',
-    description: 'Executive series tray for office use.',
-    image: '/images/gallery/wooden-trays/20260210_173701.jpg'
-  },
-  {
-    id: 'wt-5',
-    title: 'Wooden Tray - Signature Collection',
-    category: 'WOODEN TRAYS',
-    description: 'Signature collection tray with premium finish.',
-    image: '/images/gallery/wooden-trays/20260210_173702.jpg'
-  },
-
-  // ===== Drinkware =====
-
-  // 11. COFFEE MUGS
-  {
-    id: 'cm-1',
-    title: 'Coffee Mug - Classic Edition',
-    category: 'COFFEE MUGS',
-    description: 'Elegant coffee mug for office use.',
-    image: '/images/gallery/coffee-mugs/20260210_173703.jpg'
-  },
-  {
-    id: 'cm-2',
-    title: 'Coffee Mug - Premium Version',
-    category: 'COFFEE MUGS',
-    description: 'Premium ceramic coffee mug.',
-    image: '/images/gallery/coffee-mugs/20260210_173704.jpg'
-  },
-  {
-    id: 'cm-3',
-    title: 'Coffee Mug - Deluxe Model',
-    category: 'COFFEE MUGS',
-    description: 'Deluxe mug with gold rim.',
-    image: '/images/gallery/coffee-mugs/20260210_173705.jpg'
-  },
-  {
-    id: 'cm-4',
-    title: 'Coffee Mug - Executive Series',
-    category: 'COFFEE MUGS',
-    description: 'Executive series mug with logo.',
-    image: '/images/gallery/coffee-mugs/20260210_173706.jpg'
-  },
-  {
-    id: 'cm-5',
-    title: 'Coffee Mug - Signature Collection',
-    category: 'COFFEE MUGS',
-    description: 'Signature collection mug with premium finish.',
-    image: '/images/gallery/coffee-mugs/20260210_173707.jpg'
-  },
-
-  // 12. GLASS TUMBLERS
-  {
-    id: 'gt-1',
-    title: 'Glass Tumbler - Classic Edition',
-    category: 'GLASS TUMBLERS',
-    description: 'Elegant glass tumbler set.',
-    image: '/images/gallery/glass-tumblers/20260210_173708.jpg'
-  },
-  {
-    id: 'gt-2',
-    title: 'Glass Tumbler - Premium Version',
-    category: 'GLASS TUMBLERS',
-    description: 'Premium crystal glass tumblers.',
-    image: '/images/gallery/glass-tumblers/20260210_173709.jpg'
-  },
-  {
-    id: 'gt-3',
-    title: 'Glass Tumbler - Deluxe Model',
-    category: 'GLASS TUMBLERS',
-    description: 'Deluxe tumblers with etched design.',
-    image: '/images/gallery/glass-tumblers/20260210_173710.jpg'
-  },
-  {
-    id: 'gt-4',
-    title: 'Glass Tumbler - Executive Series',
-    category: 'GLASS TUMBLERS',
-    description: 'Executive series tumblers with gift box.',
-    image: '/images/gallery/glass-tumblers/20260210_173711.jpg'
-  },
-  {
-    id: 'gt-5',
-    title: 'Glass Tumbler - Signature Collection',
-    category: 'GLASS TUMBLERS',
-    description: 'Signature collection tumblers with premium glass.',
-    image: '/images/gallery/glass-tumblers/20260210_173712.jpg'
-  },
-
-  // 13. WHISKEY GLASSES
-  {
-    id: 'wg-1',
-    title: 'Whiskey Glass - Classic Edition',
-    category: 'WHISKEY GLASSES',
-    description: 'Elegant whiskey glass set.',
-    image: '/images/gallery/whiskey-glasses/20260210_173713.jpg'
-  },
-  {
-    id: 'wg-2',
-    title: 'Whiskey Glass - Premium Version',
-    category: 'WHISKEY GLASSES',
-    description: 'Premium crystal whiskey glasses.',
-    image: '/images/gallery/whiskey-glasses/20260210_173714.jpg'
-  },
-  {
-    id: 'wg-3',
-    title: 'Whiskey Glass - Deluxe Model',
-    category: 'WHISKEY GLASSES',
-    description: 'Deluxe glasses with gold rim.',
-    image: '/images/gallery/whiskey-glasses/20260210_173715.jpg'
-  },
-  {
-    id: 'wg-4',
-    title: 'Whiskey Glass - Executive Series',
-    category: 'WHISKEY GLASSES',
-    description: 'Executive series glasses with gift set.',
-    image: '/images/gallery/whiskey-glasses/20260210_173716.jpg'
-  },
-  {
-    id: 'wg-5',
-    title: 'Whiskey Glass - Signature Collection',
-    category: 'WHISKEY GLASSES',
-    description: 'Signature collection glasses with premium crystal.',
-    image: '/images/gallery/whiskey-glasses/20260210_173717.jpg'
-  },
-
-  // 14. THERMOS BOTTLES
-  {
-    id: 'tb-1',
-    title: 'Thermos Bottle - Classic Edition',
-    category: 'THERMOS BOTTLES',
-    description: 'Elegant thermos bottle for office.',
-    image: '/images/gallery/thermos-bottles/20260210_173718.jpg'
-  },
-  {
-    id: 'tb-2',
-    title: 'Thermos Bottle - Premium Version',
-    category: 'THERMOS BOTTLES',
-    description: 'Premium stainless steel thermos.',
-    image: '/images/gallery/thermos-bottles/20260210_173719.jpg'
-  },
-  {
-    id: 'tb-3',
-    title: 'Thermos Bottle - Deluxe Model',
-    category: 'THERMOS BOTTLES',
-    description: 'Deluxe thermos with vacuum insulation.',
-    image: '/images/gallery/thermos-bottles/20260210_173720.jpg'
-  },
-  {
-    id: 'tb-4',
-    title: 'Thermos Bottle - Executive Series',
-    category: 'THERMOS BOTTLES',
-    description: 'Executive series thermos with logo.',
-    image: '/images/gallery/thermos-bottles/20260210_173721.jpg'
-  },
-  {
-    id: 'tb-5',
-    title: 'Thermos Bottle - Signature Collection',
-    category: 'THERMOS BOTTLES',
-    description: 'Signature collection thermos with premium finish.',
-    image: '/images/gallery/thermos-bottles/20260210_173722.jpg'
-  },
-
-  // 15. WINE GLASSES
-  {
-    id: 'wine-1',
-    title: 'Wine Glass - Classic Edition',
-    category: 'WINE GLASSES',
-    description: 'Elegant wine glass set.',
-    image: '/images/gallery/wine-glasses/20260210_173723.jpg'
-  },
-  {
-    id: 'wine-2',
-    title: 'Wine Glass - Premium Version',
-    category: 'WINE GLASSES',
-    description: 'Premium crystal wine glasses.',
-    image: '/images/gallery/wine-glasses/20260210_173724.jpg'
-  },
-  {
-    id: 'wine-3',
-    title: 'Wine Glass - Deluxe Model',
-    category: 'WINE GLASSES',
-    description: 'Deluxe wine glasses with gold stem.',
-    image: '/images/gallery/wine-glasses/20260210_173725.jpg'
-  },
-  {
-    id: 'wine-4',
-    title: 'Wine Glass - Executive Series',
-    category: 'WINE GLASSES',
-    description: 'Executive series wine glasses.',
-    image: '/images/gallery/wine-glasses/20260210_173726.jpg'
-  },
-  {
-    id: 'wine-5',
-    title: 'Wine Glass - Signature Collection',
-    category: 'WINE GLASSES',
-    description: 'Signature collection wine glasses with premium crystal.',
-    image: '/images/gallery/wine-glasses/20260210_173727.jpg'
-  },
-
-  // ===== Tech & Gadgets =====
-
-  // 16. WIRELESS CHARGERS
-  {
-    id: 'wc-16',
-    title: 'Wireless Charger - Classic Edition',
-    category: 'WIRELESS CHARGERS',
-    description: 'Elegant wireless charger for office.',
-    image: '/images/gallery/wireless-chargers/20260210_173728.jpg'
-  },
-  {
-    id: 'wc-17',
-    title: 'Wireless Charger - Premium Version',
-    category: 'WIRELESS CHARGERS',
-    description: 'Premium fast wireless charger.',
-    image: '/images/gallery/wireless-chargers/20260210_173729.jpg'
-  },
-  {
-    id: 'wc-18',
-    title: 'Wireless Charger - Deluxe Model',
-    category: 'WIRELESS CHARGERS',
-    description: 'Deluxe charger with LED indicator.',
-    image: '/images/gallery/wireless-chargers/20260210_173730.jpg'
-  },
-  {
-    id: 'wc-19',
-    title: 'Wireless Charger - Executive Series',
-    category: 'WIRELESS CHARGERS',
-    description: 'Executive series charger with premium finish.',
-    image: '/images/gallery/wireless-chargers/20260210_173731.jpg'
-  },
-  {
-    id: 'wc-20',
-    title: 'Wireless Charger - Signature Collection',
-    category: 'WIRELESS CHARGERS',
-    description: 'Signature collection charger with wood base.',
-    image: '/images/gallery/wireless-chargers/20260210_173732.jpg'
-  },
-
-  // 17. BLUETOOTH SPEAKERS
-  {
-    id: 'bs-1',
-    title: 'Bluetooth Speaker - Classic Edition',
-    category: 'BLUETOOTH SPEAKERS',
-    description: 'Elegant bluetooth speaker for office.',
-    image: '/images/gallery/bluetooth-speakers/20260210_173733.jpg'
-  },
-  {
-    id: 'bs-2',
-    title: 'Bluetooth Speaker - Premium Version',
-    category: 'BLUETOOTH SPEAKERS',
-    description: 'Premium sound bluetooth speaker.',
-    image: '/images/gallery/bluetooth-speakers/20260210_173734.jpg'
-  },
-  {
-    id: 'bs-3',
-    title: 'Bluetooth Speaker - Deluxe Model',
-    category: 'BLUETOOTH SPEAKERS',
-    description: 'Deluxe speaker with premium sound.',
-    image: '/images/gallery/bluetooth-speakers/20260210_173735.jpg'
-  },
-  {
-    id: 'bs-4',
-    title: 'Bluetooth Speaker - Executive Series',
-    category: 'BLUETOOTH SPEAKERS',
-    description: 'Executive series speaker with metal body.',
-    image: '/images/gallery/bluetooth-speakers/20260210_173736.jpg'
-  },
-  {
-    id: 'bs-5',
-    title: 'Bluetooth Speaker - Signature Collection',
-    category: 'BLUETOOTH SPEAKERS',
-    description: 'Signature collection speaker with premium finish.',
-    image: '/images/gallery/bluetooth-speakers/20260210_173737.jpg'
-  },
-
-  // 18. POWER BANKS
-  {
-    id: 'pb-1',
-    title: 'Power Bank - Classic Edition',
-    category: 'POWER BANKS',
-    description: 'Elegant power bank for travel.',
-    image: '/images/gallery/power-banks/20260210_173738.jpg'
-  },
-  {
-    id: 'pb-2',
-    title: 'Power Bank - Premium Version',
-    category: 'POWER BANKS',
-    description: 'Premium fast charging power bank.',
-    image: '/images/gallery/power-banks/20260210_173739.jpg'
-  },
-  {
-    id: 'pb-3',
-    title: 'Power Bank - Deluxe Model',
-    category: 'POWER BANKS',
-    description: 'Deluxe power bank with solar charging.',
-    image: '/images/gallery/power-banks/20260210_173740.jpg'
-  },
-  {
-    id: 'pb-4',
-    title: 'Power Bank - Executive Series',
-    category: 'POWER BANKS',
-    description: 'Executive series power bank with metal body.',
-    image: '/images/gallery/power-banks/20260210_173741.jpg'
-  },
-  {
-    id: 'pb-5',
-    title: 'Power Bank - Signature Collection',
-    category: 'POWER BANKS',
-    description: 'Signature collection power bank with premium finish.',
-    image: '/images/gallery/power-banks/20260210_173742.jpg'
-  },
-
-  // 19. USB DRIVES
-  {
-    id: 'usb-1',
-    title: 'USB Drive - Classic Edition',
-    category: 'USB DRIVES',
-    description: 'Elegant USB drive for professionals.',
-    image: '/images/gallery/usb-drives/20260210_173743.jpg'
-  },
-  {
-    id: 'usb-2',
-    title: 'USB Drive - Premium Version',
-    category: 'USB DRIVES',
-    description: 'Premium high-speed USB drive.',
-    image: '/images/gallery/usb-drives/20260210_173744.jpg'
-  },
-  {
-    id: 'usb-3',
-    title: 'USB Drive - Deluxe Model',
-    category: 'USB DRIVES',
-    description: 'Deluxe USB drive with metal casing.',
-    image: '/images/gallery/usb-drives/20260210_173745.jpg'
-  },
-  {
-    id: 'usb-4',
-    title: 'USB Drive - Executive Series',
-    category: 'USB DRIVES',
-    description: 'Executive series USB with leather case.',
-    image: '/images/gallery/usb-drives/20260210_173746.jpg'
-  },
-  {
-    id: 'usb-5',
-    title: 'USB Drive - Signature Collection',
-    category: 'USB DRIVES',
-    description: 'Signature collection USB with premium finish.',
-    image: '/images/gallery/usb-drives/20260210_173747.jpg'
-  },
-
-  // 20. LAPTOP SLEEVES
-  {
-    id: 'ls-1',
-    title: 'Laptop Sleeve - Classic Edition',
-    category: 'LAPTOP SLEEVES',
-    description: 'Elegant laptop sleeve for professionals.',
-    image: '/images/gallery/laptop-sleeves/20260210_173748.jpg'
-  },
-  {
-    id: 'ls-2',
-    title: 'Laptop Sleeve - Premium Version',
-    category: 'LAPTOP SLEEVES',
-    description: 'Premium neoprene laptop sleeve.',
-    image: '/images/gallery/laptop-sleeves/20260210_173749.jpg'
-  },
-  {
-    id: 'ls-3',
-    title: 'Laptop Sleeve - Deluxe Model',
-    category: 'LAPTOP SLEEVES',
-    description: 'Deluxe sleeve with extra padding.',
-    image: '/images/gallery/laptop-sleeves/20260210_173750.jpg'
-  },
-  {
-    id: 'ls-4',
-    title: 'Laptop Sleeve - Executive Series',
-    category: 'LAPTOP SLEEVES',
-    description: 'Executive sleeve with leather finish.',
-    image: '/images/gallery/laptop-sleeves/20260210_173751.jpg'
-  },
-  {
-    id: 'ls-5',
-    title: 'Laptop Sleeve - Signature Collection',
-    category: 'LAPTOP SLEEVES',
-    description: 'Signature collection sleeve with premium materials.',
-    image: '/images/gallery/laptop-sleeves/20260210_173752.jpg'
-  },
-
-  // ===== Office & Stationery =====
-
-  // 21. LEATHER NOTEBOOKS
-  {
-    id: 'ln-1',
-    title: 'Leather Notebook - Classic Edition',
-    category: 'LEATHER NOTEBOOKS',
-    description: 'Elegant leather notebook for professionals.',
-    image: '/images/gallery/leather-notebooks/20260210_173753.jpg'
-  },
-  {
-    id: 'ln-2',
-    title: 'Leather Notebook - Premium Version',
-    category: 'LEATHER NOTEBOOKS',
-    description: 'Premium genuine leather notebook.',
-    image: '/images/gallery/leather-notebooks/20260210_173754.jpg'
-  },
-  {
-    id: 'ln-3',
-    title: 'Leather Notebook - Deluxe Model',
-    category: 'LEATHER NOTEBOOKS',
-    description: 'Deluxe notebook with gold edges.',
-    image: '/images/gallery/leather-notebooks/20260210_173755.jpg'
-  },
-  {
-    id: 'ln-4',
-    title: 'Leather Notebook - Executive Series',
-    category: 'LEATHER NOTEBOOKS',
-    description: 'Executive series notebook with embossed logo.',
-    image: '/images/gallery/leather-notebooks/20260210_173756.jpg'
-  },
-  {
-    id: 'ln-5',
-    title: 'Leather Notebook - Signature Collection',
-    category: 'LEATHER NOTEBOOKS',
-    description: 'Signature collection notebook with premium leather.',
-    image: '/images/gallery/leather-notebooks/20260210_173757.jpg'
-  },
-
-  // 22. DESK CALENDARS
+  // ===== 6. DESK CALENDAR =====
   {
     id: 'dc-1',
-    title: 'Desk Calendar - Classic Edition',
-    category: 'DESK CALENDARS',
-    description: 'Elegant desk calendar for office.',
-    image: '/images/gallery/desk-calendars/20260210_173758.jpg'
+    title: 'Classic Desk Calendar',
+    category: 'DESK CALENDAR',
+    description: 'Elegant desk calendar with premium wooden base.',
+    image: '/PRODUCT CATEGORY/DESK CALENDAR/20260210_141329.jpg'
   },
   {
     id: 'dc-2',
-    title: 'Desk Calendar - Premium Version',
-    category: 'DESK CALENDARS',
-    description: 'Premium wooden desk calendar.',
-    image: '/images/gallery/desk-calendars/20260210_173759.jpg'
+    title: 'Premium Wooden Calendar',
+    category: 'DESK CALENDAR',
+    description: 'Premium desk calendar with handcrafted wooden design.',
+    image: '/PRODUCT CATEGORY/DESK CALENDAR/20260210_141449.jpg'
   },
   {
     id: 'dc-3',
-    title: 'Desk Calendar - Deluxe Model',
-    category: 'DESK CALENDARS',
-    description: 'Deluxe calendar with brass accents.',
-    image: '/images/gallery/desk-calendars/20260210_173800.jpg'
+    title: 'Deluxe Calendar System',
+    category: 'DESK CALENDAR',
+    description: 'Deluxe calendar with elegant design and premium finish.',
+    image: '/PRODUCT CATEGORY/DESK CALENDAR/20260210_135328.jpg'
   },
   {
     id: 'dc-4',
-    title: 'Desk Calendar - Executive Series',
-    category: 'DESK CALENDARS',
-    description: 'Executive series calendar with leather base.',
-    image: '/images/gallery/desk-calendars/20260210_173801.jpg'
+    title: 'Executive Desk Calendar',
+    category: 'DESK CALENDAR',
+    description: 'Executive series calendar with sophisticated features.',
+    image: '/PRODUCT CATEGORY/DESK CALENDAR/20260210_141812.jpg'
   },
   {
     id: 'dc-5',
-    title: 'Desk Calendar - Signature Collection',
-    category: 'DESK CALENDARS',
-    description: 'Signature collection calendar with premium finish.',
-    image: '/images/gallery/desk-calendars/20260210_173802.jpg'
+    title: 'Signature Collection Calendar',
+    category: 'DESK CALENDAR',
+    description: 'Signature calendar with unique design elements.',
+    image: '/PRODUCT CATEGORY/DESK CALENDAR/IMG_20230312_185809.jpg'
   },
 
-  // 23. PAPER HOLDERS
+  // ===== 7. DESK CLOCK =====
   {
-    id: 'ph-1',
-    title: 'Paper Holder - Classic Edition',
-    category: 'PAPER HOLDERS',
-    description: 'Elegant paper holder for desk.',
-    image: '/images/gallery/paper-holders/20260210_173803.jpg'
+    id: 'dcl-1',
+    title: 'Classic Desk Clock',
+    category: 'DESK CLOCK',
+    description: 'Elegant desk clock with timeless design for professionals.',
+    image: '/PRODUCT CATEGORY/DESK CLOCK/dcl1.jpg'
   },
   {
-    id: 'ph-2',
-    title: 'Paper Holder - Premium Version',
-    category: 'PAPER HOLDERS',
-    description: 'Premium paper holder with weighted base.',
-    image: '/images/gallery/paper-holders/20260210_173804.jpg'
+    id: 'dcl-2',
+    title: 'Premium Roman Clock',
+    category: 'DESK CLOCK',
+    description: 'Premium desk clock with roman numerals and gold finish.',
+    image: '/PRODUCT CATEGORY/DESK CLOCK/dcl2.jpg'
   },
   {
-    id: 'ph-3',
-    title: 'Paper Holder - Deluxe Model',
-    category: 'PAPER HOLDERS',
-    description: 'Deluxe paper holder with brass finish.',
-    image: '/images/gallery/paper-holders/20260210_173805.jpg'
+    id: 'dcl-3',
+    title: 'Deluxe Chrome Clock',
+    category: 'DESK CLOCK',
+    description: 'Deluxe chrome clock with modern design and precision.',
+    image: '/PRODUCT CATEGORY/DESK CLOCK/deluxe-dcl.jpg'
   },
   {
-    id: 'ph-4',
-    title: 'Paper Holder - Executive Series',
-    category: 'PAPER HOLDERS',
-    description: 'Executive series paper holder with logo.',
-    image: '/images/gallery/paper-holders/20260210_173806.jpg'
+    id: 'dcl-4',
+    title: 'Executive Desk Clock',
+    category: 'DESK CLOCK',
+    description: 'Executive series clock with premium craftsmanship.',
+    image: '/PRODUCT CATEGORY/DESK CLOCK/executive-dcl.jpg'
   },
   {
-    id: 'ph-5',
-    title: 'Paper Holder - Signature Collection',
-    category: 'PAPER HOLDERS',
-    description: 'Signature collection paper holder with premium materials.',
-    image: '/images/gallery/paper-holders/20260210_173807.jpg'
-  },
-
-  // 24. STICKY NOTE HOLDERS
-  {
-    id: 'snh-1',
-    title: 'Sticky Note Holder - Classic Edition',
-    category: 'STICKY NOTE HOLDERS',
-    description: 'Elegant sticky note holder for desk.',
-    image: '/images/gallery/sticky-note-holders/20260210_173808.jpg'
-  },
-  {
-    id: 'snh-2',
-    title: 'Sticky Note Holder - Premium Version',
-    category: 'STICKY NOTE HOLDERS',
-    description: 'Premium holder with acrylic finish.',
-    image: '/images/gallery/sticky-note-holders/20260210_173809.jpg'
-  },
-  {
-    id: 'snh-3',
-    title: 'Sticky Note Holder - Deluxe Model',
-    category: 'STICKY NOTE HOLDERS',
-    description: 'Deluxe holder with wooden base.',
-    image: '/images/gallery/sticky-note-holders/20260210_173810.jpg'
-  },
-  {
-    id: 'snh-4',
-    title: 'Sticky Note Holder - Executive Series',
-    category: 'STICKY NOTE HOLDERS',
-    description: 'Executive series holder with pen slot.',
-    image: '/images/gallery/sticky-note-holders/20260210_173811.jpg'
-  },
-  {
-    id: 'snh-5',
-    title: 'Sticky Note Holder - Signature Collection',
-    category: 'STICKY NOTE HOLDERS',
-    description: 'Signature collection holder with premium finish.',
-    image: '/images/gallery/sticky-note-holders/20260210_173812.jpg'
+    id: 'dcl-5',
+    title: 'Signature Collection Clock',
+    category: 'DESK CLOCK',
+    description: 'Signature collection with unique design and premium materials.',
+    image: '/PRODUCT CATEGORY/DESK CLOCK/signature-dcl.jpg'
   },
 
-  // 25. LETTER OPENERS
+  // ===== 8. DESK ORGANISER COMBO =====
   {
-    id: 'lo-1',
-    title: 'Letter Opener - Classic Edition',
-    category: 'LETTER OPENERS',
-    description: 'Elegant letter opener for office.',
-    image: '/images/gallery/letter-openers/20260210_173813.jpg'
+    id: 'doc-1',
+    title: 'Classic Organiser Combo',
+    category: 'DESK ORGANISER COMBO',
+    description: 'Complete desk organiser combo with multiple accessories.',
+    image: '/PRODUCT CATEGORY/DESK ORGANISER COMBO/20260213_152037.jpg'
   },
   {
-    id: 'lo-2',
-    title: 'Letter Opener - Premium Version',
-    category: 'LETTER OPENERS',
-    description: 'Premium letter opener with wooden handle.',
-    image: '/images/gallery/letter-openers/20260210_173814.jpg'
+    id: 'doc-2',
+    title: 'Premium Organiser Combo',
+    category: 'DESK ORGANISER COMBO',
+    description: 'Premium combo with organiser, pen stand, and card holder.',
+    image: '/PRODUCT CATEGORY/DESK ORGANISER COMBO/IMG_20230318_185959.jpg'
   },
   {
-    id: 'lo-3',
-    title: 'Letter Opener - Deluxe Model',
-    category: 'LETTER OPENERS',
-    description: 'Deluxe opener with brass finish.',
-    image: '/images/gallery/letter-openers/20260210_173815.jpg'
+    id: 'doc-3',
+    title: 'Deluxe Wooden Combo',
+    category: 'DESK ORGANISER COMBO',
+    description: 'Deluxe wooden finish combo for executive desks.',
+    image: '/PRODUCT CATEGORY/DESK ORGANISER COMBO/20260212_131455.jpg'
   },
   {
-    id: 'lo-4',
-    title: 'Letter Opener - Executive Series',
-    category: 'LETTER OPENERS',
-    description: 'Executive series opener with gift box.',
-    image: '/images/gallery/letter-openers/20260210_173816.jpg'
+    id: 'doc-4',
+    title: 'Executive Desk Combo',
+    category: 'DESK ORGANISER COMBO',
+    description: 'Executive series combo with premium features.',
+    image: '/PRODUCT CATEGORY/DESK ORGANISER COMBO/IMG_20230312_183158.jpg'
   },
   {
-    id: 'lo-5',
-    title: 'Letter Opener - Signature Collection',
-    category: 'LETTER OPENERS',
-    description: 'Signature collection opener with premium steel.',
-    image: '/images/gallery/letter-openers/20260210_173817.jpg'
-  },
-
-  // 26. BRIEFCASES
-  {
-    id: 'bc-1',
-    title: 'Briefcase - Classic Edition',
-    category: 'BRIEFCASES',
-    description: 'Elegant briefcase for professionals.',
-    image: '/images/gallery/briefcases/20260210_173818.jpg'
-  },
-  {
-    id: 'bc-2',
-    title: 'Briefcase - Premium Version',
-    category: 'BRIEFCASES',
-    description: 'Premium leather briefcase.',
-    image: '/images/gallery/briefcases/20260210_173819.jpg'
-  },
-  {
-    id: 'bc-3',
-    title: 'Briefcase - Deluxe Model',
-    category: 'BRIEFCASES',
-    description: 'Deluxe briefcase with combination lock.',
-    image: '/images/gallery/briefcases/20260210_173820.jpg'
-  },
-  {
-    id: 'bc-4',
-    title: 'Briefcase - Executive Series',
-    category: 'BRIEFCASES',
-    description: 'Executive series briefcase with laptop compartment.',
-    image: '/images/gallery/briefcases/20260210_173821.jpg'
-  },
-  {
-    id: 'bc-5',
-    title: 'Briefcase - Signature Collection',
-    category: 'BRIEFCASES',
-    description: 'Signature collection briefcase with premium leather.',
-    image: '/images/gallery/briefcases/20260210_173822.jpg'
+    id: 'doc-5',
+    title: 'Signature Organiser Combo',
+    category: 'DESK ORGANISER COMBO',
+    description: 'Signature collection with premium materials and design.',
+    image: '/PRODUCT CATEGORY/DESK ORGANISER COMBO/20260213_151916.jpg'
   },
 
-  // 27. TOTE BAGS
+  // ===== 9. DIWALI HAMPER =====
   {
-    id: 'tb-27',
-    title: 'Tote Bag - Classic Edition',
-    category: 'TOTE BAGS',
-    description: 'Elegant tote bag for daily use.',
-    image: '/images/gallery/tote-bags/20260210_173823.jpg'
+    id: 'dh-1',
+    title: 'Classic Diwali Hamper',
+    category: 'DIWALI HAMPER',
+    description: 'Elegant Diwali hamper with premium gifts and sweets.',
+    image: '/PRODUCT CATEGORY/DIWALI HAMPER/dh1.jpg'
   },
   {
-    id: 'tb-28',
-    title: 'Tote Bag - Premium Version',
-    category: 'TOTE BAGS',
-    description: 'Premium canvas tote bag.',
-    image: '/images/gallery/tote-bags/20260210_173824.jpg'
+    id: 'dh-2',
+    title: 'Premium Diwali Gift Set',
+    category: 'DIWALI HAMPER',
+    description: 'Premium hamper with assorted luxury gifts.',
+    image: '/PRODUCT CATEGORY/DIWALI HAMPER/dh2.jpg'
   },
   {
-    id: 'tb-29',
-    title: 'Tote Bag - Deluxe Model',
-    category: 'TOTE BAGS',
-    description: 'Deluxe tote with leather handles.',
-    image: '/images/gallery/tote-bags/20260210_173825.jpg'
+    id: 'dh-3',
+    title: 'Deluxe Festive Hamper',
+    category: 'DIWALI HAMPER',
+    description: 'Deluxe hamper with premium chocolates and dry fruits.',
+    image: '/PRODUCT CATEGORY/DIWALI HAMPER/deluxe-dh.jpg'
   },
   {
-    id: 'tb-30',
-    title: 'Tote Bag - Executive Series',
-    category: 'TOTE BAGS',
-    description: 'Executive series tote with laptop compartment.',
-    image: '/images/gallery/tote-bags/20260210_173826.jpg'
+    id: 'dh-4',
+    title: 'Executive Diwali Collection',
+    category: 'DIWALI HAMPER',
+    description: 'Executive series with curated luxury gifts.',
+    image: '/PRODUCT CATEGORY/DIWALI HAMPER/executive-dh.jpg'
   },
   {
-    id: 'tb-31',
-    title: 'Tote Bag - Signature Collection',
-    category: 'TOTE BAGS',
-    description: 'Signature collection tote with premium materials.',
-    image: '/images/gallery/tote-bags/20260210_173827.jpg'
-  },
-
-  // 28. BACKPACKS
-  {
-    id: 'bp-1',
-    title: 'Backpack - Classic Edition',
-    category: 'BACKPACKS',
-    description: 'Elegant backpack for professionals.',
-    image: '/images/gallery/backpacks/20260210_173828.jpg'
-  },
-  {
-    id: 'bp-2',
-    title: 'Backpack - Premium Version',
-    category: 'BACKPACKS',
-    description: 'Premium waterproof backpack.',
-    image: '/images/gallery/backpacks/20260210_173829.jpg'
-  },
-  {
-    id: 'bp-3',
-    title: 'Backpack - Deluxe Model',
-    category: 'BACKPACKS',
-    description: 'Deluxe backpack with USB charging port.',
-    image: '/images/gallery/backpacks/20260210_173830.jpg'
-  },
-  {
-    id: 'bp-4',
-    title: 'Backpack - Executive Series',
-    category: 'BACKPACKS',
-    description: 'Executive series backpack with leather finish.',
-    image: '/images/gallery/backpacks/20260210_173831.jpg'
-  },
-  {
-    id: 'bp-5',
-    title: 'Backpack - Signature Collection',
-    category: 'BACKPACKS',
-    description: 'Signature collection backpack with premium materials.',
-    image: '/images/gallery/backpacks/20260210_173832.jpg'
+    id: 'dh-5',
+    title: 'Signature Celebration Hamper',
+    category: 'DIWALI HAMPER',
+    description: 'Signature collection with premium packaging and gifts.',
+    image: '/PRODUCT CATEGORY/DIWALI HAMPER/signature-dh.jpg'
   },
 
-  // 29. DUFFEL BAGS
+  // ===== 10. DR IN OUT =====
   {
-    id: 'db-1',
-    title: 'Duffel Bag - Classic Edition',
-    category: 'DUFFEL BAGS',
-    description: 'Elegant duffel bag for travel.',
-    image: '/images/gallery/duffel-bags/20260210_173833.jpg'
+    id: 'dio-1',
+    title: 'Classic Dr In/Out Board',
+    category: 'DR IN OUT',
+    description: 'Elegant doctor in/out sign board for clinics.',
+    image: '/PRODUCT CATEGORY/DR IN OUT/dio1.jpg'
   },
   {
-    id: 'db-2',
-    title: 'Duffel Bag - Premium Version',
-    category: 'DUFFEL BAGS',
-    description: 'Premium leather duffel bag.',
-    image: '/images/gallery/duffel-bags/20260210_173834.jpg'
+    id: 'dio-2',
+    title: 'Premium LED In/Out Board',
+    category: 'DR IN OUT',
+    description: 'Premium in/out board with LED lighting.',
+    image: '/PRODUCT CATEGORY/DR IN OUT/dio2.jpg'
   },
   {
-    id: 'db-3',
-    title: 'Duffel Bag - Deluxe Model',
-    category: 'DUFFEL BAGS',
-    description: 'Deluxe duffel with shoe compartment.',
-    image: '/images/gallery/duffel-bags/20260210_173835.jpg'
+    id: 'dio-3',
+    title: 'Deluxe In/Out System',
+    category: 'DR IN OUT',
+    description: 'Deluxe board with premium finish and features.',
+    image: '/PRODUCT CATEGORY/DR IN OUT/deluxe-dio.jpg'
   },
   {
-    id: 'db-4',
-    title: 'Duffel Bag - Executive Series',
-    category: 'DUFFEL BAGS',
-    description: 'Executive series duffel with laptop sleeve.',
-    image: '/images/gallery/duffel-bags/20260210_173836.jpg'
+    id: 'dio-4',
+    title: 'Executive In/Out Board',
+    category: 'DR IN OUT',
+    description: 'Executive series with sophisticated design.',
+    image: '/PRODUCT CATEGORY/DR IN OUT/executive-dio.jpg'
   },
   {
-    id: 'db-5',
-    title: 'Duffel Bag - Signature Collection',
-    category: 'DUFFEL BAGS',
-    description: 'Signature collection duffel with premium leather.',
-    image: '/images/gallery/duffel-bags/20260210_173837.jpg'
-  },
-
-  // 30. LUGGAGE TAGS
-  {
-    id: 'lt-1',
-    title: 'Luggage Tag - Classic Edition',
-    category: 'LUGGAGE TAGS',
-    description: 'Elegant luggage tag for travelers.',
-    image: '/images/gallery/luggage-tags/20260210_173838.jpg'
-  },
-  {
-    id: 'lt-2',
-    title: 'Luggage Tag - Premium Version',
-    category: 'LUGGAGE TAGS',
-    description: 'Premium leather luggage tag.',
-    image: '/images/gallery/luggage-tags/20260210_173839.jpg'
-  },
-  {
-    id: 'lt-3',
-    title: 'Luggage Tag - Deluxe Model',
-    category: 'LUGGAGE TAGS',
-    description: 'Deluxe tag with brass hardware.',
-    image: '/images/gallery/luggage-tags/20260210_173840.jpg'
-  },
-  {
-    id: 'lt-4',
-    title: 'Luggage Tag - Executive Series',
-    category: 'LUGGAGE TAGS',
-    description: 'Executive series tag with logo engraving.',
-    image: '/images/gallery/luggage-tags/20260210_173841.jpg'
-  },
-  {
-    id: 'lt-5',
-    title: 'Luggage Tag - Signature Collection',
-    category: 'LUGGAGE TAGS',
-    description: 'Signature collection tag with premium leather.',
-    image: '/images/gallery/luggage-tags/20260210_173842.jpg'
+    id: 'dio-5',
+    title: 'Signature In/Out Collection',
+    category: 'DR IN OUT',
+    description: 'Signature collection with premium materials.',
+    image: '/PRODUCT CATEGORY/DR IN OUT/signature-dio.jpg'
   },
 
-  // 31. ENGRAVED PENS
+  // ===== 11. DR NAME PLATE =====
   {
-    id: 'ep-1',
-    title: 'Engraved Pen - Classic Edition',
-    category: 'ENGRAVED PENS',
-    description: 'Elegant pen with custom engraving.',
-    image: '/images/gallery/engraved-pens/20260210_173843.jpg'
+    id: 'dnp-1',
+    title: 'Classic Dr Name Plate',
+    category: 'DR NAME PLATE',
+    description: 'Elegant name plate for doctors with premium finish.',
+    image: '/PRODUCT CATEGORY/DR NAME PLATE/dnp1.jpg'
   },
   {
-    id: 'ep-2',
-    title: 'Engraved Pen - Premium Version',
-    category: 'ENGRAVED PENS',
-    description: 'Premium pen with gold engraving.',
-    image: '/images/gallery/engraved-pens/20260210_173844.jpg'
+    id: 'dnp-2',
+    title: 'Premium Gold Name Plate',
+    category: 'DR NAME PLATE',
+    description: 'Premium name plate with gold finish and engraving.',
+    image: '/PRODUCT CATEGORY/DR NAME PLATE/dnp2.jpg'
   },
   {
-    id: 'ep-3',
-    title: 'Engraved Pen - Deluxe Model',
-    category: 'ENGRAVED PENS',
-    description: 'Deluxe pen with wooden case.',
-    image: '/images/gallery/engraved-pens/20260210_173845.jpg'
+    id: 'dnp-3',
+    title: 'Deluxe Name Plate Set',
+    category: 'DR NAME PLATE',
+    description: 'Deluxe set with matching accessories.',
+    image: '/PRODUCT CATEGORY/DR NAME PLATE/deluxe-dnp.jpg'
   },
   {
-    id: 'ep-4',
-    title: 'Engraved Pen - Executive Series',
-    category: 'ENGRAVED PENS',
-    description: 'Executive series pen with personalized message.',
-    image: '/images/gallery/engraved-pens/20260210_173846.jpg'
+    id: 'dnp-4',
+    title: 'Executive Name Plate',
+    category: 'DR NAME PLATE',
+    description: 'Executive series with sophisticated design.',
+    image: '/PRODUCT CATEGORY/DR NAME PLATE/executive-dnp.jpg'
   },
   {
-    id: 'ep-5',
-    title: 'Engraved Pen - Signature Collection',
-    category: 'ENGRAVED PENS',
-    description: 'Signature collection pen with premium engraving.',
-    image: '/images/gallery/engraved-pens/20260210_173847.jpg'
-  },
-
-  // 32. CUSTOM KEYCHAINS
-  {
-    id: 'ck-1',
-    title: 'Custom Keychain - Classic Edition',
-    category: 'CUSTOM KEYCHAINS',
-    description: 'Elegant keychain with custom design.',
-    image: '/images/gallery/custom-keychains/20260210_173848.jpg'
-  },
-  {
-    id: 'ck-2',
-    title: 'Custom Keychain - Premium Version',
-    category: 'CUSTOM KEYCHAINS',
-    description: 'Premium keychain with leather strap.',
-    image: '/images/gallery/custom-keychains/20260210_173849.jpg'
-  },
-  {
-    id: 'ck-3',
-    title: 'Custom Keychain - Deluxe Model',
-    category: 'CUSTOM KEYCHAINS',
-    description: 'Deluxe keychain with brass finish.',
-    image: '/images/gallery/custom-keychains/20260210_173850.jpg'
-  },
-  {
-    id: 'ck-4',
-    title: 'Custom Keychain - Executive Series',
-    category: 'CUSTOM KEYCHAINS',
-    description: 'Executive series keychain with logo.',
-    image: '/images/gallery/custom-keychains/20260210_173851.jpg'
-  },
-  {
-    id: 'ck-5',
-    title: 'Custom Keychain - Signature Collection',
-    category: 'CUSTOM KEYCHAINS',
-    description: 'Signature collection keychain with premium materials.',
-    image: '/images/gallery/custom-keychains/20260210_173852.jpg'
+    id: 'dnp-5',
+    title: 'Signature Name Plate',
+    category: 'DR NAME PLATE',
+    description: 'Signature collection with premium engraving.',
+    image: '/PRODUCT CATEGORY/DR NAME PLATE/signature-dnp.jpg'
   },
 
-  // 33. NAMEPLATES
+  // ===== 12. KEY CHAIN =====
+  {
+    id: 'kc-1',
+    title: 'Classic Key Chain',
+    category: 'KEY CHAIN',
+    description: 'Elegant key chain with premium finish.',
+    image: '/PRODUCT CATEGORY/KEY CHAIN/kc1.jpg'
+  },
+  {
+    id: 'kc-2',
+    title: 'Premium Leather Key Chain',
+    category: 'KEY CHAIN',
+    description: 'Premium key chain with genuine leather strap.',
+    image: '/PRODUCT CATEGORY/KEY CHAIN/kc2.jpg'
+  },
+  {
+    id: 'kc-3',
+    title: 'Deluxe Key Chain Set',
+    category: 'KEY CHAIN',
+    description: 'Deluxe set with multiple key chains.',
+    image: '/PRODUCT CATEGORY/KEY CHAIN/deluxe-kc.jpg'
+  },
+  {
+    id: 'kc-4',
+    title: 'Executive Key Chain',
+    category: 'KEY CHAIN',
+    description: 'Executive series with premium metal finish.',
+    image: '/PRODUCT CATEGORY/KEY CHAIN/executive-kc.jpg'
+  },
+  {
+    id: 'kc-5',
+    title: 'Signature Key Chain',
+    category: 'KEY CHAIN',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/KEY CHAIN/signature-kc.jpg'
+  },
+
+  // ===== 13. KEY HANGER =====
+  {
+    id: 'kh-1',
+    title: 'Classic Key Hanger',
+    category: 'KEY HANGER',
+    description: 'Elegant key hanger for office and home.',
+    image: '/PRODUCT CATEGORY/KEY HANGER/kh1.jpg'
+  },
+  {
+    id: 'kh-2',
+    title: 'Premium Wooden Key Hanger',
+    category: 'KEY HANGER',
+    description: 'Premium key hanger with wooden base and hooks.',
+    image: '/PRODUCT CATEGORY/KEY HANGER/kh2.jpg'
+  },
+  {
+    id: 'kh-3',
+    title: 'Deluxe Key Organiser',
+    category: 'KEY HANGER',
+    description: 'Deluxe organiser with multiple hooks.',
+    image: '/PRODUCT CATEGORY/KEY HANGER/deluxe-kh.jpg'
+  },
+  {
+    id: 'kh-4',
+    title: 'Executive Key Hanger',
+    category: 'KEY HANGER',
+    description: 'Executive series with premium finish.',
+    image: '/PRODUCT CATEGORY/KEY HANGER/executive-kh.jpg'
+  },
+  {
+    id: 'kh-5',
+    title: 'Signature Key Hanger',
+    category: 'KEY HANGER',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/KEY HANGER/signature-kh.jpg'
+  },
+
+  // ===== 14. KITCHEN ITEMS =====
+  {
+    id: 'ki-1',
+    title: 'Classic Kitchen Set',
+    category: 'KITCHEN ITEMS',
+    description: 'Elegant kitchen items for gifting.',
+    image: '/PRODUCT CATEGORY/KITCHEN ITEMS/ki1.jpg'
+  },
+  {
+    id: 'ki-2',
+    title: 'Premium Stainless Steel Set',
+    category: 'KITCHEN ITEMS',
+    description: 'Premium kitchen set with stainless steel finish.',
+    image: '/PRODUCT CATEGORY/KITCHEN ITEMS/ki2.jpg'
+  },
+  {
+    id: 'ki-3',
+    title: 'Deluxe Kitchen Collection',
+    category: 'KITCHEN ITEMS',
+    description: 'Deluxe collection with multiple kitchen essentials.',
+    image: '/PRODUCT CATEGORY/KITCHEN ITEMS/deluxe-ki.jpg'
+  },
+  {
+    id: 'ki-4',
+    title: 'Executive Kitchen Set',
+    category: 'KITCHEN ITEMS',
+    description: 'Executive series with premium quality items.',
+    image: '/PRODUCT CATEGORY/KITCHEN ITEMS/executive-ki.jpg'
+  },
+  {
+    id: 'ki-5',
+    title: 'Signature Kitchen Collection',
+    category: 'KITCHEN ITEMS',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/KITCHEN ITEMS/signature-ki.jpg'
+  },
+
+  // ===== 15. LAPTOP STAND =====
+  {
+    id: 'ls-1',
+    title: 'Classic Laptop Stand',
+    category: 'LAPTOP STAND',
+    description: 'Elegant laptop stand for comfortable working.',
+    image: '/PRODUCT CATEGORY/LAPTOP STAND/ls1.jpg'
+  },
+  {
+    id: 'ls-2',
+    title: 'Premium Adjustable Stand',
+    category: 'LAPTOP STAND',
+    description: 'Premium laptop stand with adjustable height.',
+    image: '/PRODUCT CATEGORY/LAPTOP STAND/ls2.jpg'
+  },
+  {
+    id: 'ls-3',
+    title: 'Deluxe Laptop Riser',
+    category: 'LAPTOP STAND',
+    description: 'Deluxe riser with cooling features.',
+    image: '/PRODUCT CATEGORY/LAPTOP STAND/deluxe-ls.jpg'
+  },
+  {
+    id: 'ls-4',
+    title: 'Executive Laptop Stand',
+    category: 'LAPTOP STAND',
+    description: 'Executive series with premium materials.',
+    image: '/PRODUCT CATEGORY/LAPTOP STAND/executive-ls.jpg'
+  },
+  {
+    id: 'ls-5',
+    title: 'Signature Laptop Stand',
+    category: 'LAPTOP STAND',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/LAPTOP STAND/signature-ls.jpg'
+  },
+
+  // ===== 16. MINIATURE =====
+  {
+    id: 'min-1',
+    title: 'Classic Miniature Figure',
+    category: 'MINIATURE',
+    description: 'Elegant miniature collectible for display.',
+    image: '/PRODUCT CATEGORY/MINIATURE/min1.jpg'
+  },
+  {
+    id: 'min-2',
+    title: 'Premium Detailed Miniature',
+    category: 'MINIATURE',
+    description: 'Premium miniature with fine detailing.',
+    image: '/PRODUCT CATEGORY/MINIATURE/min2.jpg'
+  },
+  {
+    id: 'min-3',
+    title: 'Deluxe Miniature Set',
+    category: 'MINIATURE',
+    description: 'Deluxe set with multiple miniatures.',
+    image: '/PRODUCT CATEGORY/MINIATURE/deluxe-min.jpg'
+  },
+  {
+    id: 'min-4',
+    title: 'Executive Miniature Collection',
+    category: 'MINIATURE',
+    description: 'Executive series with premium finish.',
+    image: '/PRODUCT CATEGORY/MINIATURE/executive-min.jpg'
+  },
+  {
+    id: 'min-5',
+    title: 'Signature Miniature',
+    category: 'MINIATURE',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/MINIATURE/signature-min.jpg'
+  },
+
+  // ===== 17. NOTE PAD =====
   {
     id: 'np-1',
-    title: 'Nameplate - Classic Edition',
-    category: 'NAMEPLATES',
-    description: 'Elegant nameplate for office desk.',
-    image: '/images/gallery/nameplates/20260210_173853.jpg'
+    title: 'Classic Note Pad',
+    category: 'NOTE PAD',
+    description: 'Elegant note pad for professional use.',
+    image: '/PRODUCT CATEGORY/NOTE PAD/np1.jpg'
   },
   {
     id: 'np-2',
-    title: 'Nameplate - Premium Version',
-    category: 'NAMEPLATES',
-    description: 'Premium nameplate with gold finish.',
-    image: '/images/gallery/nameplates/20260210_173854.jpg'
+    title: 'Premium Leather Note Pad',
+    category: 'NOTE PAD',
+    description: 'Premium note pad with genuine leather cover.',
+    image: '/PRODUCT CATEGORY/NOTE PAD/np2.jpg'
   },
   {
     id: 'np-3',
-    title: 'Nameplate - Deluxe Model',
-    category: 'NAMEPLATES',
-    description: 'Deluxe nameplate with wooden base.',
-    image: '/images/gallery/nameplates/20260210_173855.jpg'
+    title: 'Deluxe Note Pad Set',
+    category: 'NOTE PAD',
+    description: 'Deluxe set with multiple note pads.',
+    image: '/PRODUCT CATEGORY/NOTE PAD/deluxe-np.jpg'
   },
   {
     id: 'np-4',
-    title: 'Nameplate - Executive Series',
-    category: 'NAMEPLATES',
-    description: 'Executive series nameplate with LED backlight.',
-    image: '/images/gallery/nameplates/20260210_173856.jpg'
+    title: 'Executive Note Pad',
+    category: 'NOTE PAD',
+    description: 'Executive series with premium paper quality.',
+    image: '/PRODUCT CATEGORY/NOTE PAD/executive-np.jpg'
   },
   {
     id: 'np-5',
-    title: 'Nameplate - Signature Collection',
-    category: 'NAMEPLATES',
-    description: 'Signature collection nameplate with premium materials.',
-    image: '/images/gallery/nameplates/20260210_173857.jpg'
+    title: 'Signature Note Pad',
+    category: 'NOTE PAD',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/NOTE PAD/signature-np.jpg'
   },
 
-  // 34. PERSONALIZED STAMPS
+  // ===== 18. PAPER WEIGHT =====
   {
-    id: 'ps-34',
-    title: 'Personalized Stamp - Classic Edition',
-    category: 'PERSONALIZED STAMPS',
-    description: 'Elegant stamp with custom design.',
-    image: '/images/gallery/personalized-stamps/20260210_173858.jpg'
+    id: 'pw-1',
+    title: 'Classic Paper Weight',
+    category: 'PAPER WEIGHT',
+    description: 'Elegant paper weight for office desk.',
+    image: '/PRODUCT CATEGORY/PAPER WEIGHT/pw1.jpg'
   },
   {
-    id: 'ps-35',
-    title: 'Personalized Stamp - Premium Version',
-    category: 'PERSONALIZED STAMPS',
-    description: 'Premium stamp with wooden handle.',
-    image: '/images/gallery/personalized-stamps/20260210_173859.jpg'
+    id: 'pw-2',
+    title: 'Premium Crystal Paper Weight',
+    category: 'PAPER WEIGHT',
+    description: 'Premium paper weight with crystal finish.',
+    image: '/PRODUCT CATEGORY/PAPER WEIGHT/pw2.jpg'
   },
   {
-    id: 'ps-36',
-    title: 'Personalized Stamp - Deluxe Model',
-    category: 'PERSONALIZED STAMPS',
-    description: 'Deluxe stamp with self-inking mechanism.',
-    image: '/images/gallery/personalized-stamps/20260210_173900.jpg'
+    id: 'pw-3',
+    title: 'Deluxe Marble Paper Weight',
+    category: 'PAPER WEIGHT',
+    description: 'Deluxe paper weight with marble base.',
+    image: '/PRODUCT CATEGORY/PAPER WEIGHT/deluxe-pw.jpg'
   },
   {
-    id: 'ps-37',
-    title: 'Personalized Stamp - Executive Series',
-    category: 'PERSONALIZED STAMPS',
-    description: 'Executive series stamp with custom logo.',
-    image: '/images/gallery/personalized-stamps/20260210_173901.jpg'
+    id: 'pw-4',
+    title: 'Executive Paper Weight',
+    category: 'PAPER WEIGHT',
+    description: 'Executive series with premium materials.',
+    image: '/PRODUCT CATEGORY/PAPER WEIGHT/executive-pw.jpg'
   },
   {
-    id: 'ps-38',
-    title: 'Personalized Stamp - Signature Collection',
-    category: 'PERSONALIZED STAMPS',
-    description: 'Signature collection stamp with premium handle.',
-    image: '/images/gallery/personalized-stamps/20260210_173902.jpg'
-  },
-
-  // 35. MONOGRAMMED TOWELS
-  {
-    id: 'mt-1',
-    title: 'Monogrammed Towel - Classic Edition',
-    category: 'MONOGRAMMED TOWELS',
-    description: 'Elegant towel with monogram embroidery.',
-    image: '/images/gallery/monogrammed-towels/20260210_173903.jpg'
-  },
-  {
-    id: 'mt-2',
-    title: 'Monogrammed Towel - Premium Version',
-    category: 'MONOGRAMMED TOWELS',
-    description: 'Premium Turkish cotton towel.',
-    image: '/images/gallery/monogrammed-towels/20260210_173904.jpg'
-  },
-  {
-    id: 'mt-3',
-    title: 'Monogrammed Towel - Deluxe Model',
-    category: 'MONOGRAMMED TOWELS',
-    description: 'Deluxe towel set with gold embroidery.',
-    image: '/images/gallery/monogrammed-towels/20260210_173905.jpg'
-  },
-  {
-    id: 'mt-4',
-    title: 'Monogrammed Towel - Executive Series',
-    category: 'MONOGRAMMED TOWELS',
-    description: 'Executive series towel with personalized design.',
-    image: '/images/gallery/monogrammed-towels/20260210_173906.jpg'
-  },
-  {
-    id: 'mt-5',
-    title: 'Monogrammed Towel - Signature Collection',
-    category: 'MONOGRAMMED TOWELS',
-    description: 'Signature collection towel with premium embroidery.',
-    image: '/images/gallery/monogrammed-towels/20260210_173907.jpg'
+    id: 'pw-5',
+    title: 'Signature Paper Weight',
+    category: 'PAPER WEIGHT',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/PAPER WEIGHT/signature-pw.jpg'
   },
 
-  // ===== Wellness & Lifestyle =====
-
-  // 36. AROMATHERAPY SETS
+  // ===== 19. PEN HOLDER & MOBILE STAND =====
   {
-    id: 'as-1',
-    title: 'Aromatherapy Set - Classic Edition',
-    category: 'AROMATHERAPY SETS',
-    description: 'Elegant aromatherapy set for relaxation.',
-    image: '/images/gallery/aromatherapy-sets/20260210_173908.jpg'
+    id: 'phms-1',
+    title: 'Classic Pen & Phone Stand',
+    category: 'PEN HOLDER & MOBILE STAND',
+    description: 'Elegant pen holder with mobile stand.',
+    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/phms1.jpg'
   },
   {
-    id: 'as-2',
-    title: 'Aromatherapy Set - Premium Version',
-    category: 'AROMATHERAPY SETS',
-    description: 'Premium set with essential oils.',
-    image: '/images/gallery/aromatherapy-sets/20260210_173909.jpg'
+    id: 'phms-2',
+    title: 'Premium Wooden Stand',
+    category: 'PEN HOLDER & MOBILE STAND',
+    description: 'Premium pen holder with wooden finish and mobile stand.',
+    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/phms2.jpg'
   },
   {
-    id: 'as-3',
-    title: 'Aromatherapy Set - Deluxe Model',
-    category: 'AROMATHERAPY SETS',
-    description: 'Deluxe set with ceramic diffuser.',
-    image: '/images/gallery/aromatherapy-sets/20260210_173910.jpg'
+    id: 'phms-3',
+    title: 'Deluxe Desk Stand',
+    category: 'PEN HOLDER & MOBILE STAND',
+    description: 'Deluxe stand with multiple compartments.',
+    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/deluxe-phms.jpg'
   },
   {
-    id: 'as-4',
-    title: 'Aromatherapy Set - Executive Series',
-    category: 'AROMATHERAPY SETS',
-    description: 'Executive series set with premium oils.',
-    image: '/images/gallery/aromatherapy-sets/20260210_173911.jpg'
+    id: 'phms-4',
+    title: 'Executive Stand Set',
+    category: 'PEN HOLDER & MOBILE STAND',
+    description: 'Executive series with premium features.',
+    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/executive-phms.jpg'
   },
   {
-    id: 'as-5',
-    title: 'Aromatherapy Set - Signature Collection',
-    category: 'AROMATHERAPY SETS',
-    description: 'Signature collection set with luxury packaging.',
-    image: '/images/gallery/aromatherapy-sets/20260210_173912.jpg'
+    id: 'phms-5',
+    title: 'Signature Collection Stand',
+    category: 'PEN HOLDER & MOBILE STAND',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/signature-phms.jpg'
   },
 
-  // 37. SPA GIFT SETS
+  // ===== 20. PEN STAND =====
   {
-    id: 'sgs-1',
-    title: 'Spa Gift Set - Classic Edition',
-    category: 'SPA GIFT SETS',
-    description: 'Elegant spa gift set for relaxation.',
-    image: '/images/gallery/spa-gift-sets/20260210_173913.jpg'
+    id: 'ps-1',
+    title: 'Classic Pen Stand',
+    category: 'PEN STAND',
+    description: 'Elegant pen stand for office use.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20250526_111137.jpg'
   },
   {
-    id: 'sgs-2',
-    title: 'Spa Gift Set - Premium Version',
-    category: 'SPA GIFT SETS',
-    description: 'Premium spa set with organic products.',
-    image: '/images/gallery/spa-gift-sets/20260210_173914.jpg'
+    id: 'ps-2',
+    title: 'Premium Gold Pen Stand',
+    category: 'PEN STAND',
+    description: 'Premium pen stand with gold finish.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20250526_111250.jpg'
   },
   {
-    id: 'sgs-3',
-    title: 'Spa Gift Set - Deluxe Model',
-    category: 'SPA GIFT SETS',
-    description: 'Deluxe set with bamboo accessories.',
-    image: '/images/gallery/spa-gift-sets/20260210_173915.jpg'
+    id: 'ps-3',
+    title: 'Deluxe Marble Pen Stand',
+    category: 'PEN STAND',
+    description: 'Deluxe pen stand with marble base.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260210_142323.jpg'
   },
   {
-    id: 'sgs-4',
-    title: 'Spa Gift Set - Executive Series',
-    category: 'SPA GIFT SETS',
-    description: 'Executive series set with premium packaging.',
-    image: '/images/gallery/spa-gift-sets/20260210_173916.jpg'
+    id: 'ps-4',
+    title: 'Executive Pen Stand Set',
+    category: 'PEN STAND',
+    description: 'Executive series with gift box.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260210_142838.jpg'
   },
   {
-    id: 'sgs-5',
-    title: 'Spa Gift Set - Signature Collection',
-    category: 'SPA GIFT SETS',
-    description: 'Signature collection set with luxury products.',
-    image: '/images/gallery/spa-gift-sets/20260210_173917.jpg'
-  },
-
-  // 38. YOGA MATS
-  {
-    id: 'ym-1',
-    title: 'Yoga Mat - Classic Edition',
-    category: 'YOGA MATS',
-    description: 'Elegant yoga mat for wellness.',
-    image: '/images/gallery/yoga-mats/20260210_173918.jpg'
+    id: 'ps-5',
+    title: 'Signature Collection Stand',
+    category: 'PEN STAND',
+    description: 'Signature collection with premium finish.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260211_131222.jpg'
   },
   {
-    id: 'ym-2',
-    title: 'Yoga Mat - Premium Version',
-    category: 'YOGA MATS',
-    description: 'Premium eco-friendly yoga mat.',
-    image: '/images/gallery/yoga-mats/20260210_173919.jpg'
+    id: 'ps-6',
+    title: 'Elite Pen Stand',
+    category: 'PEN STAND',
+    description: 'Elite pen stand with modern design.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260211_132509.jpg'
   },
   {
-    id: 'ym-3',
-    title: 'Yoga Mat - Deluxe Model',
-    category: 'YOGA MATS',
-    description: 'Deluxe mat with alignment lines.',
-    image: '/images/gallery/yoga-mats/20260210_173920.jpg'
+    id: 'ps-7',
+    title: 'Luxury Pen Stand',
+    category: 'PEN STAND',
+    description: 'Luxury pen stand with premium finish.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260211_142429.jpg'
   },
   {
-    id: 'ym-4',
-    title: 'Yoga Mat - Executive Series',
-    category: 'YOGA MATS',
-    description: 'Executive series mat with carry bag.',
-    image: '/images/gallery/yoga-mats/20260210_173921.jpg'
+    id: 'ps-8',
+    title: 'Classic Plus Pen Stand',
+    category: 'PEN STAND',
+    description: 'Classic pen stand with enhanced design.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260211_143223.jpg'
   },
   {
-    id: 'ym-5',
-    title: 'Yoga Mat - Signature Collection',
-    category: 'YOGA MATS',
-    description: 'Signature collection mat with premium materials.',
-    image: '/images/gallery/yoga-mats/20260210_173922.jpg'
+    id: 'ps-9',
+    title: 'Premium Plus Pen Stand',
+    category: 'PEN STAND',
+    description: 'Premium plus pen stand for executives.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260210_162545.jpg'
+  },
+  {
+    id: 'ps-10',
+    title: 'Master Pen Stand',
+    category: 'PEN STAND',
+    description: 'Master pen stand with exquisite design.',
+    image: '/PRODUCT CATEGORY/PEN STAND/20260210_145202.jpg'
   },
 
-  // 39. FITNESS BOTTLES
+  // ===== 21. PEN STAND WITH CARD HOLDER =====
   {
-    id: 'fb-1',
-    title: 'Fitness Bottle - Classic Edition',
-    category: 'FITNESS BOTTLES',
-    description: 'Elegant fitness bottle for gym.',
-    image: '/images/gallery/fitness-bottles/20260210_173923.jpg'
+    id: 'pswch-1',
+    title: 'Classic Pen & Card Holder',
+    category: 'PEN STAND WITH CARD HOLDER',
+    description: 'Elegant pen stand with visiting card holder.',
+    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/pswch1.jpg'
   },
   {
-    id: 'fb-2',
-    title: 'Fitness Bottle - Premium Version',
-    category: 'FITNESS BOTTLES',
-    description: 'Premium stainless steel bottle.',
-    image: '/images/gallery/fitness-bottles/20260210_173924.jpg'
+    id: 'pswch-2',
+    title: 'Premium Desk Set',
+    category: 'PEN STAND WITH CARD HOLDER',
+    description: 'Premium set with card holder slot.',
+    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/pswch2.jpg'
   },
   {
-    id: 'fb-3',
-    title: 'Fitness Bottle - Deluxe Model',
-    category: 'FITNESS BOTTLES',
-    description: 'Deluxe bottle with infuser.',
-    image: '/images/gallery/fitness-bottles/20260210_173925.jpg'
+    id: 'pswch-3',
+    title: 'Deluxe Organiser Set',
+    category: 'PEN STAND WITH CARD HOLDER',
+    description: 'Deluxe set with multiple compartments.',
+    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/deluxe-pswch.jpg'
   },
   {
-    id: 'fb-4',
-    title: 'Fitness Bottle - Executive Series',
-    category: 'FITNESS BOTTLES',
-    description: 'Executive series bottle with time marker.',
-    image: '/images/gallery/fitness-bottles/20260210_173926.jpg'
+    id: 'pswch-4',
+    title: 'Executive Desk Set',
+    category: 'PEN STAND WITH CARD HOLDER',
+    description: 'Executive series with premium design.',
+    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/executive-pswch.jpg'
   },
   {
-    id: 'fb-5',
-    title: 'Fitness Bottle - Signature Collection',
-    category: 'FITNESS BOTTLES',
-    description: 'Signature collection bottle with premium finish.',
-    image: '/images/gallery/fitness-bottles/20260210_173927.jpg'
-  },
-
-  // 40. WELLNESS JOURNALS
-  {
-    id: 'wj-1',
-    title: 'Wellness Journal - Classic Edition',
-    category: 'WELLNESS JOURNALS',
-    description: 'Elegant wellness journal for self-care.',
-    image: '/images/gallery/wellness-journals/20260210_173928.jpg'
-  },
-  {
-    id: 'wj-2',
-    title: 'Wellness Journal - Premium Version',
-    category: 'WELLNESS JOURNALS',
-    description: 'Premium journal with leather cover.',
-    image: '/images/gallery/wellness-journals/20260210_173929.jpg'
-  },
-  {
-    id: 'wj-3',
-    title: 'Wellness Journal - Deluxe Model',
-    category: 'WELLNESS JOURNALS',
-    description: 'Deluxe journal with daily prompts.',
-    image: '/images/gallery/wellness-journals/20260210_173930.jpg'
-  },
-  {
-    id: 'wj-4',
-    title: 'Wellness Journal - Executive Series',
-    category: 'WELLNESS JOURNALS',
-    description: 'Executive series journal with goal tracker.',
-    image: '/images/gallery/wellness-journals/20260210_173931.jpg'
-  },
-  {
-    id: 'wj-5',
-    title: 'Wellness Journal - Signature Collection',
-    category: 'WELLNESS JOURNALS',
-    description: 'Signature collection journal with premium paper.',
-    image: '/images/gallery/wellness-journals/20260210_173932.jpg'
+    id: 'pswch-5',
+    title: 'Signature Collection Set',
+    category: 'PEN STAND WITH CARD HOLDER',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/signature-pswch.jpg'
   },
 
-  // ===== Premium Collections =====
-
-  // 41. GOLD COLLECTION
+  // ===== 22. PHONE STAND =====
   {
-    id: 'gc-1',
-    title: 'Gold Collection - Classic Edition',
-    category: 'GOLD COLLECTION',
-    description: 'Elegant product from gold collection.',
-    image: '/images/gallery/gold-collection/20260210_173933.jpg'
+    id: 'phs-1',
+    title: 'Classic Phone Stand',
+    category: 'PHONE STAND',
+    description: 'Elegant phone stand for desk.',
+    image: '/PRODUCT CATEGORY/PHONE STAND/phs1.jpg'
   },
   {
-    id: 'gc-2',
-    title: 'Gold Collection - Premium Version',
-    category: 'GOLD COLLECTION',
-    description: 'Premium piece from gold collection.',
-    image: '/images/gallery/gold-collection/20260210_173934.jpg'
+    id: 'phs-2',
+    title: 'Premium Adjustable Stand',
+    category: 'PHONE STAND',
+    description: 'Premium phone stand with adjustable angle.',
+    image: '/PRODUCT CATEGORY/PHONE STAND/phs2.jpg'
   },
   {
-    id: 'gc-3',
-    title: 'Gold Collection - Deluxe Model',
-    category: 'GOLD COLLECTION',
-    description: 'Deluxe item with 24K gold finish.',
-    image: '/images/gallery/gold-collection/20260210_173935.jpg'
+    id: 'phs-3',
+    title: 'Deluxe Phone Stand',
+    category: 'PHONE STAND',
+    description: 'Deluxe stand with premium finish.',
+    image: '/PRODUCT CATEGORY/PHONE STAND/deluxe-phs.jpg'
   },
   {
-    id: 'gc-4',
-    title: 'Gold Collection - Executive Series',
-    category: 'GOLD COLLECTION',
-    description: 'Executive series piece with gold plating.',
-    image: '/images/gallery/gold-collection/20260210_173936.jpg'
+    id: 'phs-4',
+    title: 'Executive Phone Stand',
+    category: 'PHONE STAND',
+    description: 'Executive series with premium features.',
+    image: '/PRODUCT CATEGORY/PHONE STAND/executive-phs.jpg'
   },
   {
-    id: 'gc-5',
-    title: 'Gold Collection - Signature Collection',
-    category: 'GOLD COLLECTION',
-    description: 'Signature piece with premium gold finish.',
-    image: '/images/gallery/gold-collection/20260210_173937.jpg'
+    id: 'phs-5',
+    title: 'Signature Phone Stand',
+    category: 'PHONE STAND',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/PHONE STAND/signature-phs.jpg'
   },
 
-  // 42. SILVER COLLECTION
+  // ===== 23. PUZZEL AND GAMES =====
   {
-    id: 'sc-1',
-    title: 'Silver Collection - Classic Edition',
-    category: 'SILVER COLLECTION',
-    description: 'Elegant product from silver collection.',
-    image: '/images/gallery/silver-collection/20260210_173938.jpg'
+    id: 'pg-1',
+    title: 'Classic Puzzle Game',
+    category: 'PUZZEL AND GAMES',
+    description: 'Elegant puzzle for brain teasers.',
+    image: '/PRODUCT CATEGORY/PUZZEL AND GAMES/pg1.jpg'
   },
   {
-    id: 'sc-2',
-    title: 'Silver Collection - Premium Version',
-    category: 'SILVER COLLECTION',
-    description: 'Premium piece with silver finish.',
-    image: '/images/gallery/silver-collection/20260210_173939.jpg'
+    id: 'pg-2',
+    title: 'Premium Wooden Puzzle',
+    category: 'PUZZEL AND GAMES',
+    description: 'Premium puzzle with wooden pieces.',
+    image: '/PRODUCT CATEGORY/PUZZEL AND GAMES/pg2.jpg'
   },
   {
-    id: 'sc-3',
-    title: 'Silver Collection - Deluxe Model',
-    category: 'SILVER COLLECTION',
-    description: 'Deluxe item with sterling silver.',
-    image: '/images/gallery/silver-collection/20260210_173940.jpg'
+    id: 'pg-3',
+    title: 'Deluxe Game Set',
+    category: 'PUZZEL AND GAMES',
+    description: 'Deluxe set with multiple puzzles.',
+    image: '/PRODUCT CATEGORY/PUZZEL AND GAMES/deluxe-pg.jpg'
   },
   {
-    id: 'sc-4',
-    title: 'Silver Collection - Executive Series',
-    category: 'SILVER COLLECTION',
-    description: 'Executive series piece with silver plating.',
-    image: '/images/gallery/silver-collection/20260210_173941.jpg'
+    id: 'pg-4',
+    title: 'Executive Game Collection',
+    category: 'PUZZEL AND GAMES',
+    description: 'Executive series with premium quality.',
+    image: '/PRODUCT CATEGORY/PUZZEL AND GAMES/executive-pg.jpg'
   },
   {
-    id: 'sc-5',
-    title: 'Silver Collection - Signature Collection',
-    category: 'SILVER COLLECTION',
-    description: 'Signature piece with premium silver finish.',
-    image: '/images/gallery/silver-collection/20260210_173942.jpg'
-  },
-
-  // 43. CRYSTAL COLLECTION
-  {
-    id: 'cc-1',
-    title: 'Crystal Collection - Classic Edition',
-    category: 'CRYSTAL COLLECTION',
-    description: 'Elegant product from crystal collection.',
-    image: '/images/gallery/crystal-collection/20260210_173943.jpg'
-  },
-  {
-    id: 'cc-2',
-    title: 'Crystal Collection - Premium Version',
-    category: 'CRYSTAL COLLECTION',
-    description: 'Premium piece with Swarovski crystals.',
-    image: '/images/gallery/crystal-collection/20260210_173944.jpg'
-  },
-  {
-    id: 'cc-3',
-    title: 'Crystal Collection - Deluxe Model',
-    category: 'CRYSTAL COLLECTION',
-    description: 'Deluxe item with premium crystals.',
-    image: '/images/gallery/crystal-collection/20260210_173945.jpg'
-  },
-  {
-    id: 'cc-4',
-    title: 'Crystal Collection - Executive Series',
-    category: 'CRYSTAL COLLECTION',
-    description: 'Executive series piece with crystal accents.',
-    image: '/images/gallery/crystal-collection/20260210_173946.jpg'
-  },
-  {
-    id: 'cc-5',
-    title: 'Crystal Collection - Signature Collection',
-    category: 'CRYSTAL COLLECTION',
-    description: 'Signature piece with premium crystal finish.',
-    image: '/images/gallery/crystal-collection/20260210_173947.jpg'
+    id: 'pg-5',
+    title: 'Signature Puzzle Collection',
+    category: 'PUZZEL AND GAMES',
+    description: 'Signature collection with unique designs.',
+    image: '/PRODUCT CATEGORY/PUZZEL AND GAMES/signature-pg.jpg'
   },
 
-  // 44. MARBLE COLLECTION
+  // ===== 24. STICKY NOTE or CHIT HOLDER =====
   {
-    id: 'mc-1',
-    title: 'Marble Collection - Classic Edition',
-    category: 'MARBLE COLLECTION',
-    description: 'Elegant product from marble collection.',
-    image: '/images/gallery/marble-collection/20260210_173948.jpg'
+    id: 'snch-1',
+    title: 'Classic Sticky Note Holder',
+    category: 'STICKY NOTE or CHIT HOLDER',
+    description: 'Elegant sticky note holder for desk.',
+    image: '/PRODUCT CATEGORY/STICKY NOTE or CHIT HOLDER/snch1.jpg'
   },
   {
-    id: 'mc-2',
-    title: 'Marble Collection - Premium Version',
-    category: 'MARBLE COLLECTION',
-    description: 'Premium piece with natural marble.',
-    image: '/images/gallery/marble-collection/20260210_173949.jpg'
+    id: 'snch-2',
+    title: 'Premium Wooden Holder',
+    category: 'STICKY NOTE or CHIT HOLDER',
+    description: 'Premium holder with wooden base.',
+    image: '/PRODUCT CATEGORY/STICKY NOTE or CHIT HOLDER/snch2.jpg'
   },
   {
-    id: 'mc-3',
-    title: 'Marble Collection - Deluxe Model',
-    category: 'MARBLE COLLECTION',
-    description: 'Deluxe item with Italian marble.',
-    image: '/images/gallery/marble-collection/20260210_173950.jpg'
+    id: 'snch-3',
+    title: 'Deluxe Note Organiser',
+    category: 'STICKY NOTE or CHIT HOLDER',
+    description: 'Deluxe organiser with multiple sections.',
+    image: '/PRODUCT CATEGORY/STICKY NOTE or CHIT HOLDER/deluxe-snch.jpg'
   },
   {
-    id: 'mc-4',
-    title: 'Marble Collection - Executive Series',
-    category: 'MARBLE COLLECTION',
-    description: 'Executive series piece with marble base.',
-    image: '/images/gallery/marble-collection/20260210_173951.jpg'
+    id: 'snch-4',
+    title: 'Executive Note Holder',
+    category: 'STICKY NOTE or CHIT HOLDER',
+    description: 'Executive series with premium finish.',
+    image: '/PRODUCT CATEGORY/STICKY NOTE or CHIT HOLDER/executive-snch.jpg'
   },
   {
-    id: 'mc-5',
-    title: 'Marble Collection - Signature Collection',
-    category: 'MARBLE COLLECTION',
-    description: 'Signature piece with premium marble finish.',
-    image: '/images/gallery/marble-collection/20260210_173952.jpg'
+    id: 'snch-5',
+    title: 'Signature Collection Holder',
+    category: 'STICKY NOTE or CHIT HOLDER',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/STICKY NOTE or CHIT HOLDER/signature-snch.jpg'
   },
 
-  // 45. PREMIUM BOX SETS
+  // ===== 25. TEA COASTER =====
   {
-    id: 'pbs-1',
-    title: 'Premium Box Set - Classic Edition',
-    category: 'PREMIUM BOX SETS',
-    description: 'Elegant box set for gifting.',
-    image: '/images/gallery/premium-box-sets/20260210_173953.jpg'
+    id: 'tc-1',
+    title: 'Classic Tea Coaster Set',
+    category: 'TEA COASTER',
+    description: 'Elegant tea coaster set for office.',
+    image: '/PRODUCT CATEGORY/TEA COASTER/tc1.jpg'
   },
   {
-    id: 'pbs-2',
-    title: 'Premium Box Set - Premium Version',
-    category: 'PREMIUM BOX SETS',
-    description: 'Premium box set with luxury items.',
-    image: '/images/gallery/premium-box-sets/20260210_173954.jpg'
+    id: 'tc-2',
+    title: 'Premium Wooden Coasters',
+    category: 'TEA COASTER',
+    description: 'Premium coaster set with wooden finish.',
+    image: '/PRODUCT CATEGORY/TEA COASTER/tc2.jpg'
   },
   {
-    id: 'pbs-3',
-    title: 'Premium Box Set - Deluxe Model',
-    category: 'PREMIUM BOX SETS',
-    description: 'Deluxe box set with wooden case.',
-    image: '/images/gallery/premium-box-sets/20260210_173955.jpg'
+    id: 'tc-3',
+    title: 'Deluxe Coaster Collection',
+    category: 'TEA COASTER',
+    description: 'Deluxe set with multiple designs.',
+    image: '/PRODUCT CATEGORY/TEA COASTER/deluxe-tc.jpg'
   },
   {
-    id: 'pbs-4',
-    title: 'Premium Box Set - Executive Series',
-    category: 'PREMIUM BOX SETS',
-    description: 'Executive series box with premium gifts.',
-    image: '/images/gallery/premium-box-sets/20260210_173956.jpg'
+    id: 'tc-4',
+    title: 'Executive Coaster Set',
+    category: 'TEA COASTER',
+    description: 'Executive series with premium quality.',
+    image: '/PRODUCT CATEGORY/TEA COASTER/executive-tc.jpg'
   },
   {
-    id: 'pbs-5',
-    title: 'Premium Box Set - Signature Collection',
-    category: 'PREMIUM BOX SETS',
-    description: 'Signature collection box with luxury packaging.',
-    image: '/images/gallery/premium-box-sets/20260210_173957.jpg'
+    id: 'tc-5',
+    title: 'Signature Coaster Collection',
+    category: 'TEA COASTER',
+    description: 'Signature collection with unique designs.',
+    image: '/PRODUCT CATEGORY/TEA COASTER/signature-tc.jpg'
+  },
+
+  // ===== 26. TISSUE HOLDER =====
+  {
+    id: 'th-1',
+    title: 'Classic Tissue Holder',
+    category: 'TISSUE HOLDER',
+    description: 'Elegant tissue holder for office.',
+    image: '/PRODUCT CATEGORY/TISSUE HOLDER/th1.jpg'
+  },
+  {
+    id: 'th-2',
+    title: 'Premium Wooden Tissue Box',
+    category: 'TISSUE HOLDER',
+    description: 'Premium tissue holder with wooden finish.',
+    image: '/PRODUCT CATEGORY/TISSUE HOLDER/th2.jpg'
+  },
+  {
+    id: 'th-3',
+    title: 'Deluxe Tissue Holder',
+    category: 'TISSUE HOLDER',
+    description: 'Deluxe holder with premium design.',
+    image: '/PRODUCT CATEGORY/TISSUE HOLDER/deluxe-th.jpg'
+  },
+  {
+    id: 'th-4',
+    title: 'Executive Tissue Holder',
+    category: 'TISSUE HOLDER',
+    description: 'Executive series with premium features.',
+    image: '/PRODUCT CATEGORY/TISSUE HOLDER/executive-th.jpg'
+  },
+  {
+    id: 'th-5',
+    title: 'Signature Tissue Collection',
+    category: 'TISSUE HOLDER',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/TISSUE HOLDER/signature-th.jpg'
+  },
+
+  // ===== 27. TO DO LIST BOARD =====
+  {
+    id: 'tdlb-1',
+    title: 'Classic To Do List Board',
+    category: 'TO DO LIST BOARD',
+    description: 'Elegant to do list board for office.',
+    image: '/PRODUCT CATEGORY/TO DO LIST BOARD/tdlb1.jpg'
+  },
+  {
+    id: 'tdlb-2',
+    title: 'Premium Magnetic Board',
+    category: 'TO DO LIST BOARD',
+    description: 'Premium board with magnetic surface.',
+    image: '/PRODUCT CATEGORY/TO DO LIST BOARD/tdlb2.jpg'
+  },
+  {
+    id: 'tdlb-3',
+    title: 'Deluxe Organisation Board',
+    category: 'TO DO LIST BOARD',
+    description: 'Deluxe board with multiple features.',
+    image: '/PRODUCT CATEGORY/TO DO LIST BOARD/deluxe-tdlb.jpg'
+  },
+  {
+    id: 'tdlb-4',
+    title: 'Executive Planning Board',
+    category: 'TO DO LIST BOARD',
+    description: 'Executive series with premium design.',
+    image: '/PRODUCT CATEGORY/TO DO LIST BOARD/executive-tdlb.jpg'
+  },
+  {
+    id: 'tdlb-5',
+    title: 'Signature Collection Board',
+    category: 'TO DO LIST BOARD',
+    description: 'Signature collection with unique features.',
+    image: '/PRODUCT CATEGORY/TO DO LIST BOARD/signature-tdlb.jpg'
+  },
+
+  // ===== 28. TROPHIES =====
+  {
+    id: 'tr-1',
+    title: 'Classic Trophy',
+    category: 'TROPHIES',
+    description: 'Elegant trophy for corporate awards.',
+    image: '/PRODUCT CATEGORY/TROPHIES/tr1.jpg'
+  },
+  {
+    id: 'tr-2',
+    title: 'Premium Gold Trophy',
+    category: 'TROPHIES',
+    description: 'Premium trophy with gold finish.',
+    image: '/PRODUCT CATEGORY/TROPHIES/tr2.jpg'
+  },
+  {
+    id: 'tr-3',
+    title: 'Deluxe Crystal Trophy',
+    category: 'TROPHIES',
+    description: 'Deluxe trophy with crystal design.',
+    image: '/PRODUCT CATEGORY/TROPHIES/deluxe-tr.jpg'
+  },
+  {
+    id: 'tr-4',
+    title: 'Executive Award Trophy',
+    category: 'TROPHIES',
+    description: 'Executive series with premium quality.',
+    image: '/PRODUCT CATEGORY/TROPHIES/executive-tr.jpg'
+  },
+  {
+    id: 'tr-5',
+    title: 'Signature Collection Trophy',
+    category: 'TROPHIES',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/TROPHIES/signature-tr.jpg'
+  },
+
+  // ===== 29. VISITING CARD HOLDER =====
+  {
+    id: 'vch-1',
+    title: 'Classic Visiting Card Holder',
+    category: 'VISITING CARD HOLDER',
+    description: 'Elegant visiting card holder for professionals.',
+    image: '/PRODUCT CATEGORY/VISITING CARD HOLDER/vch1.jpg'
+  },
+  {
+    id: 'vch-2',
+    title: 'Premium Leather Card Holder',
+    category: 'VISITING CARD HOLDER',
+    description: 'Premium card holder with leather finish.',
+    image: '/PRODUCT CATEGORY/VISITING CARD HOLDER/vch2.jpg'
+  },
+  {
+    id: 'vch-3',
+    title: 'Deluxe Card Holder Set',
+    category: 'VISITING CARD HOLDER',
+    description: 'Deluxe set with multiple holders.',
+    image: '/PRODUCT CATEGORY/VISITING CARD HOLDER/deluxe-vch.jpg'
+  },
+  {
+    id: 'vch-4',
+    title: 'Executive Card Holder',
+    category: 'VISITING CARD HOLDER',
+    description: 'Executive series with premium finish.',
+    image: '/PRODUCT CATEGORY/VISITING CARD HOLDER/executive-vch.jpg'
+  },
+  {
+    id: 'vch-5',
+    title: 'Signature Card Collection',
+    category: 'VISITING CARD HOLDER',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/VISITING CARD HOLDER/signature-vch.jpg'
+  },
+
+  // ===== 30. WALL CLOCK =====
+  {
+    id: 'wc-1',
+    title: 'Classic Wall Clock',
+    category: 'WALL CLOCK',
+    description: 'Elegant wall clock for office decor.',
+    image: '/PRODUCT CATEGORY/WALL CLOCK/20260210_181143.jpg'
+  },
+  {
+    id: 'wc-2',
+    title: 'Premium Roman Wall Clock',
+    category: 'WALL CLOCK',
+    description: 'Premium wall clock with roman numerals.',
+    image: '/PRODUCT CATEGORY/WALL CLOCK/20260210_181458.jpg'
+  },
+  {
+    id: 'wc-3',
+    title: 'Deluxe Designer Clock',
+    category: 'WALL CLOCK',
+    description: 'Deluxe clock with modern design.',
+    image: '/PRODUCT CATEGORY/WALL CLOCK/deluxe-wc.jpg'
+  },
+  {
+    id: 'wc-4',
+    title: 'Executive Wall Clock',
+    category: 'WALL CLOCK',
+    description: 'Executive series with premium finish.',
+    image: '/PRODUCT CATEGORY/WALL CLOCK/executive-wc.jpg'
+  },
+  {
+    id: 'wc-5',
+    title: 'Signature Wall Clock',
+    category: 'WALL CLOCK',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/WALL CLOCK/signature-wc.jpg'
+  },
+
+  // ===== 31. WOODEN BOTTEL =====
+  {
+    id: 'wb-1',
+    title: 'Classic Wooden Bottle',
+    category: 'WOODEN BOTTEL',
+    description: 'Elegant wooden bottle for gifting.',
+    image: '/PRODUCT CATEGORY/WOODEN BOTTEL/20260210_151012.jpg'
+  },
+  {
+    id: 'wb-2',
+    title: 'Premium Engraved Bottle',
+    category: 'WOODEN BOTTEL',
+    description: 'Premium wooden bottle with engraved design.',
+    image: '/PRODUCT CATEGORY/WOODEN BOTTEL/20260210_151043.jpg'
+  },
+  {
+    id: 'wb-3',
+    title: 'Deluxe Wooden Bottle Set',
+    category: 'WOODEN BOTTEL',
+    description: 'Deluxe set with premium finish.',
+    image: '/PRODUCT CATEGORY/WOODEN BOTTEL/20260210_165824.jpg'
+  },
+  {
+    id: 'wb-4',
+    title: 'Executive Wooden Bottle',
+    category: 'WOODEN BOTTEL',
+    description: 'Executive series with unique design.',
+    image: '/PRODUCT CATEGORY/WOODEN BOTTEL/20260210_165922.jpg'
+  },
+  {
+    id: 'wb-5',
+    title: 'Signature Collection Bottle',
+    category: 'WOODEN BOTTEL',
+    description: 'Signature collection with premium features.',
+    image: '/PRODUCT CATEGORY/WOODEN BOTTEL/signature-wb.jpg'
+  },
+
+  // ===== 32. WOODEN BOX =====
+  {
+    id: 'wbox-1',
+    title: 'Classic Wooden Box',
+    category: 'WOODEN BOX',
+    description: 'Elegant wooden box for storage.',
+    image: '/PRODUCT CATEGORY/WOODEN BOX/wbox1.jpg'
+  },
+  {
+    id: 'wbox-2',
+    title: 'Premium Carved Box',
+    category: 'WOODEN BOX',
+    description: 'Premium wooden box with carved details.',
+    image: '/PRODUCT CATEGORY/WOODEN BOX/wbox2.jpg'
+  },
+  {
+    id: 'wbox-3',
+    title: 'Deluxe Storage Box',
+    category: 'WOODEN BOX',
+    description: 'Deluxe box with premium finish.',
+    image: '/PRODUCT CATEGORY/WOODEN BOX/deluxe-wbox.jpg'
+  },
+  {
+    id: 'wbox-4',
+    title: 'Executive Wooden Box',
+    category: 'WOODEN BOX',
+    description: 'Executive series with sophisticated design.',
+    image: '/PRODUCT CATEGORY/WOODEN BOX/executive-wbox.jpg'
+  },
+  {
+    id: 'wbox-5',
+    title: 'Signature Collection Box',
+    category: 'WOODEN BOX',
+    description: 'Signature collection with unique features.',
+    image: '/PRODUCT CATEGORY/WOODEN BOX/signature-wbox.jpg'
+  },
+
+  // ===== 33. WOODEN PEN =====
+  {
+    id: 'wp-1',
+    title: 'Classic Wooden Pen',
+    category: 'WOODEN PEN',
+    description: 'Elegant wooden pen for executive gifting.',
+    image: '/PRODUCT CATEGORY/WOODEN PEN/wp1.jpg'
+  },
+  {
+    id: 'wp-2',
+    title: 'Premium Gold Nib Pen',
+    category: 'WOODEN PEN',
+    description: 'Premium wooden pen with gold nib.',
+    image: '/PRODUCT CATEGORY/WOODEN PEN/wp2.jpg'
+  },
+  {
+    id: 'wp-3',
+    title: 'Deluxe Wooden Pen Set',
+    category: 'WOODEN PEN',
+    description: 'Deluxe pen set with premium finish.',
+    image: '/PRODUCT CATEGORY/WOODEN PEN/deluxe-wp.jpg'
+  },
+  {
+    id: 'wp-4',
+    title: 'Executive Wooden Pen',
+    category: 'WOODEN PEN',
+    description: 'Executive series with sophisticated design.',
+    image: '/PRODUCT CATEGORY/WOODEN PEN/executive-wp.jpg'
+  },
+  {
+    id: 'wp-5',
+    title: 'Signature Collection Pen',
+    category: 'WOODEN PEN',
+    description: 'Signature collection with unique features.',
+    image: '/PRODUCT CATEGORY/WOODEN PEN/signature-wp.jpg'
+  },
+
+  // ===== 34. WOODEN PLAQUE =====
+  {
+    id: 'wpl-1',
+    title: 'Classic Wooden Plaque',
+    category: 'WOODEN PLAQUE',
+    description: 'Elegant wooden plaque for awards.',
+    image: '/PRODUCT CATEGORY/WOODEN PLAQUE/wpl1.jpg'
+  },
+  {
+    id: 'wpl-2',
+    title: 'Premium Gold Engraved Plaque',
+    category: 'WOODEN PLAQUE',
+    description: 'Premium plaque with gold engraving.',
+    image: '/PRODUCT CATEGORY/WOODEN PLAQUE/wpl2.jpg'
+  },
+  {
+    id: 'wpl-3',
+    title: 'Deluxe Wall Plaque',
+    category: 'WOODEN PLAQUE',
+    description: 'Deluxe plaque with premium finish.',
+    image: '/PRODUCT CATEGORY/WOODEN PLAQUE/deluxe-wpl.jpg'
+  },
+  {
+    id: 'wpl-4',
+    title: 'Executive Recognition Plaque',
+    category: 'WOODEN PLAQUE',
+    description: 'Executive series with sophisticated design.',
+    image: '/PRODUCT CATEGORY/WOODEN PLAQUE/executive-wpl.jpg'
+  },
+  {
+    id: 'wpl-5',
+    title: 'Signature Collection Plaque',
+    category: 'WOODEN PLAQUE',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/WOODEN PLAQUE/signature-wpl.jpg'
+  },
+
+  // ===== 35. WOODEN SERVING TRAY =====
+  {
+    id: 'wst-1',
+    title: 'Classic Wooden Serving Tray',
+    category: 'WOODEN SERVING TRAY',
+    description: 'Elegant wooden serving tray for events.',
+    image: '/PRODUCT CATEGORY/WOODEN SERVING TRAY/wst1.jpg'
+  },
+  {
+    id: 'wst-2',
+    title: 'Premium Serving Tray Set',
+    category: 'WOODEN SERVING TRAY',
+    description: 'Premium serving tray with handles.',
+    image: '/PRODUCT CATEGORY/WOODEN SERVING TRAY/wst2.jpg'
+  },
+  {
+    id: 'wst-3',
+    title: 'Deluxe Serving Collection',
+    category: 'WOODEN SERVING TRAY',
+    description: 'Deluxe set with multiple trays.',
+    image: '/PRODUCT CATEGORY/WOODEN SERVING TRAY/deluxe-wst.jpg'
+  },
+  {
+    id: 'wst-4',
+    title: 'Executive Serving Tray',
+    category: 'WOODEN SERVING TRAY',
+    description: 'Executive series with premium finish.',
+    image: '/PRODUCT CATEGORY/WOODEN SERVING TRAY/executive-wst.jpg'
+  },
+  {
+    id: 'wst-5',
+    title: 'Signature Serving Collection',
+    category: 'WOODEN SERVING TRAY',
+    description: 'Signature collection with unique design.',
+    image: '/PRODUCT CATEGORY/WOODEN SERVING TRAY/signature-wst.jpg'
   },
 ];
 
@@ -1736,7 +1399,10 @@ export default function Gallery() {
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [visibleCount, setVisibleCount] = useState(20);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   // Get all unique categories
   const categories = useMemo(() => {
@@ -1757,6 +1423,11 @@ export default function Gallery() {
     });
   }, [searchTerm, selectedCategory]);
 
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(20);
+  }, [searchTerm, selectedCategory]);
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -1767,6 +1438,10 @@ export default function Gallery() {
 
   const handleImageError = (itemId: string) => {
     setImageErrors((prev) => ({ ...prev, [itemId]: true }));
+  };
+
+  const handleImageLoad = (itemId: string) => {
+    setLoadedImages((prev) => ({ ...prev, [itemId]: true }));
   };
 
   const getItemImageUrl = (item: GalleryItem) => {
@@ -1784,11 +1459,17 @@ export default function Gallery() {
     }
   };
 
+  const loadMore = () => {
+    setVisibleCount(prev => Math.min(prev + 20, filteredItems.length));
+  };
+
+  const visibleItems = filteredItems.slice(0, visibleCount);
+
   return (
     <>
       <SEO
         title="Gallery"
-        description="Explore our premium corporate gift collection with 44 categories."
+        description="Explore our premium corporate gift collection with 35 categories and 175+ products."
       />
 
       <PageHero
@@ -1800,14 +1481,14 @@ export default function Gallery() {
       {/* GALLERY SECTION */}
       <section className="section-padding bg-white">
         <div className="container-luxury">
-          {/* SEARCH BAR */}
+          {/* SEARCH AND CONTROLS */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-6"
+            className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between"
           >
-            <div className="relative max-w-2xl">
+            <div className="relative flex-1 max-w-2xl w-full">
               <div className="relative flex items-center">
                 <Search className="absolute left-4 w-5 h-5 text-gold-600 pointer-events-none" />
                 <input
@@ -1827,6 +1508,24 @@ export default function Gallery() {
                   </button>
                 )}
               </div>
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex gap-2 bg-beige-50 p-1 rounded-btn border-2 border-beige-200">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-btn transition-all ${viewMode === 'grid' ? 'bg-gold-600 text-white shadow-md' : 'text-forest-500 hover:text-forest-700'}`}
+                aria-label="Grid view"
+              >
+                <Grid className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-btn transition-all ${viewMode === 'list' ? 'bg-gold-600 text-white shadow-md' : 'text-forest-500 hover:text-forest-700'}`}
+                aria-label="List view"
+              >
+                <List className="w-4 h-4" />
+              </button>
             </div>
           </motion.div>
 
@@ -1899,6 +1598,7 @@ export default function Gallery() {
                 <button
                   onClick={() => scrollCategories('left')}
                   className="flex-shrink-0 p-2 bg-white border-2 border-beige-200 rounded-full hover:bg-beige-50 transition-colors shadow-sm"
+                  aria-label="Scroll categories left"
                 >
                   <ChevronLeft className="w-5 h-5 text-forest-600" />
                 </button>
@@ -1937,6 +1637,7 @@ export default function Gallery() {
                 <button
                   onClick={() => scrollCategories('right')}
                   className="flex-shrink-0 p-2 bg-white border-2 border-beige-200 rounded-full hover:bg-beige-50 transition-colors shadow-sm"
+                  aria-label="Scroll categories right"
                 >
                   <ChevronRight className="w-5 h-5 text-forest-600" />
                 </button>
@@ -1969,73 +1670,84 @@ export default function Gallery() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
+                className={viewMode === 'grid' 
+                  ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4"
+                  : "flex flex-col gap-3"
+                }
               >
-                {filteredItems.map((item) => {
+                {visibleItems.map((item) => {
                   const imageUrl = getItemImageUrl(item);
                   return (
                     <motion.div
                       key={item.id}
                       variants={itemVariants}
-                      whileHover={{ y: -4 }}
-                      className="group cursor-pointer h-full"
+                      whileHover={viewMode === 'grid' ? { y: -8, scale: 1.02 } : { x: 8 }}
+                      className={`group cursor-pointer overflow-hidden rounded-xl bg-white shadow-md hover:shadow-2xl transition-all duration-300 ${
+                        viewMode === 'list' ? 'flex flex-row items-center' : ''
+                      }`}
                       onClick={() => setSelectedItem({ ...item, image: imageUrl || '' })}
                     >
-                      <div className="card-luxury overflow-hidden h-full flex flex-col hover:shadow-luxury-lg transition-all duration-300">
-                        {/* IMAGE SECTION */}
-                        <div className="relative overflow-hidden bg-beige-50 aspect-[4/3] flex-shrink-0">
-                          {imageUrl ? (
-                            <div className="w-full h-full flex items-center justify-center bg-beige-50">
-                              <img
-                                src={imageUrl}
-                                alt={item.title}
-                                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 p-2"
-                                onError={() => handleImageError(item.id)}
-                              />
-                            </div>
-                          ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-beige-100 to-beige-200">
-                              <span className="text-forest-400 font-medium text-center px-4 text-sm md:text-base">
-                                {item.title}
-                              </span>
-                            </div>
-                          )}
-
-                          {/* HOVER OVERLAY - Hide on mobile */}
-                          <div className="hidden md:flex absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 items-center justify-center opacity-0 group-hover:opacity-100">
-                            <motion.div
-                              initial={{ scale: 0.8 }}
-                              whileHover={{ scale: 1.1 }}
-                              className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-luxury-lg"
-                            >
-                              <ZoomIn className="w-5 h-5 text-forest-700" />
-                            </motion.div>
+                      {/* IMAGE */}
+                      <div className={`relative overflow-hidden bg-beige-50 ${
+                        viewMode === 'grid' ? 'w-full aspect-square' : 'w-32 h-32 sm:w-48 sm:h-48 flex-shrink-0'
+                      }`}>
+                        {imageUrl ? (
+                          <>
+                            {!loadedImages[item.id] && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-beige-100">
+                                <Loader2 className="w-8 h-8 text-gold-600 animate-spin" />
+                              </div>
+                            )}
+                            <img
+                              src={imageUrl}
+                              alt={item.title}
+                              loading="lazy"
+                              className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${
+                                loadedImages[item.id] ? 'opacity-100' : 'opacity-0'
+                              }`}
+                              onLoad={() => handleImageLoad(item.id)}
+                              onError={() => handleImageError(item.id)}
+                            />
+                          </>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-beige-100 to-beige-200">
+                            <ImageIcon className="w-8 h-8 text-forest-300" />
                           </div>
-
-                          {/* CATEGORY BADGE */}
-                          <div className="absolute top-2 right-2 bg-gold-600/90 backdrop-blur-sm text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-semibold truncate max-w-[70%] shadow-md">
-                            {item.category}
-                          </div>
+                        )}
+                        
+                        {/* HOVER OVERLAY */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                          <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            whileHover={{ scale: 1.1 }}
+                            className="bg-white/95 rounded-full p-3 shadow-xl"
+                          >
+                            <ZoomIn className="w-6 h-6 text-forest-700" />
+                          </motion.div>
                         </div>
+                        
+                        {/* CATEGORY BADGE */}
+                        <div className="absolute bottom-2 left-2 bg-gold-600/95 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-[8px] sm:text-[10px] font-semibold truncate max-w-[70%] shadow-lg border border-white/20">
+                          {item.category}
+                        </div>
+                      </div>
 
-                        {/* CONTENT SECTION */}
-                        <div className="p-3 md:p-5 flex-1 flex flex-col">
-                          <h3 className="font-display font-bold text-sm md:text-lg text-forest-800 mb-1 line-clamp-2 group-hover:text-gold-600 transition-colors">
-                            {item.title}
-                          </h3>
-                          <p className="hidden md:block text-sm text-forest-600/70 line-clamp-2 flex-1 mb-3">
+                      {/* CONTENT */}
+                      <div className={`p-3 md:p-4 flex-1 ${
+                        viewMode === 'list' ? 'flex flex-col justify-center' : 'bg-white'
+                      }`}>
+                        <h3 className="font-display font-bold text-sm md:text-base text-forest-800 line-clamp-1 group-hover:text-gold-600 transition-colors">
+                          {item.title}
+                        </h3>
+                        {viewMode === 'list' && (
+                          <p className="text-sm text-forest-600/70 line-clamp-2 mt-1">
                             {item.description}
                           </p>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedItem({ ...item, image: imageUrl || '' });
-                            }}
-                            className="inline-flex items-center justify-center gap-1 md:gap-2 w-full bg-gold-600 hover:bg-gold-700 text-white font-semibold py-2 md:py-2.5 rounded-btn transition-colors duration-200 text-sm md:text-base"
-                          >
-                            <ZoomIn className="w-4 h-4 md:w-5 md:h-5" />
-                            View Details
-                          </button>
+                        )}
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="text-[10px] text-forest-400 bg-beige-100 px-2 py-0.5 rounded-full">
+                            #{item.id}
+                          </span>
                         </div>
                       </div>
                     </motion.div>
@@ -2047,15 +1759,15 @@ export default function Gallery() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="col-span-full text-center py-12 md:py-16"
+                className="col-span-full text-center py-16 md:py-20"
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-beige-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 border-2 border-beige-200">
-                  <Search className="w-6 h-6 md:w-8 md:h-8 text-gold-600" />
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-beige-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-beige-200">
+                  <Search className="w-8 h-8 md:w-10 md:h-10 text-gold-600" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-display font-bold text-forest-800 mb-2">
+                <h3 className="text-2xl md:text-3xl font-display font-bold text-forest-800 mb-2">
                   No items found
                 </h3>
-                <p className="text-forest-600/70 max-w-sm mx-auto mb-4 md:mb-6 text-sm md:text-base">
+                <p className="text-forest-600/70 max-w-sm mx-auto mb-6 text-sm md:text-base">
                   Try adjusting your search or filter criteria.
                 </p>
                 <button
@@ -2071,6 +1783,22 @@ export default function Gallery() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* LOAD MORE BUTTON */}
+          {filteredItems.length > visibleCount && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center mt-8"
+            >
+              <button
+                onClick={loadMore}
+                className="btn-secondary inline-flex items-center gap-2 text-sm md:text-base"
+              >
+                Load More ({filteredItems.length - visibleCount} remaining)
+              </button>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -2082,7 +1810,7 @@ export default function Gallery() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2 md:p-4"
+            className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4"
             onClick={() => setSelectedItem(null)}
           >
             <motion.div
@@ -2090,111 +1818,88 @@ export default function Gallery() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="bg-white rounded-card max-w-2xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto shadow-luxury-lg mx-2 md:mx-4"
+              className="bg-white rounded-2xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* LIGHTBOX HEADER */}
-              <div className="sticky top-0 bg-white border-b border-beige-200 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between z-10">
+              <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-beige-200 px-6 py-4 flex items-center justify-between z-10">
                 <div className="flex-1 min-w-0">
-                  <span className="inline-block text-gold-600 text-[10px] md:text-xs font-semibold uppercase tracking-wider mb-0.5 md:mb-1">
+                  <span className="inline-block text-gold-600 text-xs font-semibold uppercase tracking-wider mb-0.5">
                     {selectedItem.category}
                   </span>
-                  <h2 className="font-display text-lg md:text-2xl font-bold text-forest-800 truncate">
+                  <h2 className="font-display text-xl md:text-2xl font-bold text-forest-800 truncate">
                     {selectedItem.title}
                   </h2>
                 </div>
                 <button
                   onClick={() => setSelectedItem(null)}
-                  className="flex-shrink-0 p-1.5 md:p-2 text-forest-600 hover:text-forest-800 hover:bg-beige-100 rounded-btn transition-all"
+                  className="flex-shrink-0 p-2 text-forest-600 hover:text-forest-800 hover:bg-beige-100 rounded-full transition-all"
                 >
-                  <X className="w-5 h-5 md:w-6 md:h-6" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 
               {/* LIGHTBOX CONTENT */}
-              <div className="p-4 md:p-6 space-y-4 md:space-y-6">
+              <div className="p-6 md:p-8 space-y-6">
                 {/* IMAGE */}
-                <div className="rounded-card overflow-hidden bg-gradient-to-br from-beige-50 to-beige-100 aspect-[4/3] relative group">
+                <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-beige-50 to-beige-100">
                   {selectedItem.image ? (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="w-full h-full p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center">
-                        <img
-                          src={selectedItem.image}
-                          alt={selectedItem.title}
-                          className="w-full h-full object-contain transition-all duration-500 group-hover:scale-105 rounded-lg shadow-lg"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            const parent = e.currentTarget.parentElement;
-                            const placeholder = parent?.querySelector('.fallback-placeholder');
-                            if (placeholder) {
-                              placeholder.classList.remove('hidden');
-                            }
-                          }}
-                        />
-                      </div>
-                      
-                      {/* Fallback Placeholder */}
-                      <div className="fallback-placeholder hidden absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-beige-100 to-beige-200">
-                        <span className="text-forest-400 font-medium text-center px-3 sm:px-4 text-xs sm:text-sm md:text-base">
-                          {selectedItem.title}
-                        </span>
-                      </div>
-
-                      {/* Subtle Zoom Hint - Responsive */}
-                      <div className="absolute bottom-2 right-2 xs:bottom-3 xs:right-3 sm:bottom-4 sm:right-4 bg-black/40 backdrop-blur-sm text-white/80 px-2 py-1 xs:px-2.5 xs:py-1.5 rounded-full text-[8px] xs:text-[10px] sm:text-xs flex items-center gap-1 xs:gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <ZoomIn className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5" />
-                        <span className="hidden xs:inline">Click to zoom</span>
-                        <span className="xs:hidden">Zoom</span>
-                      </div>
+                    <div className="w-full flex items-center justify-center bg-beige-50 p-4">
+                      <img
+                        src={selectedItem.image}
+                        alt={selectedItem.title}
+                        className="w-full h-auto max-h-[60vh] object-contain rounded-lg"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
                     </div>
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-beige-100 to-beige-200">
-                      <span className="text-forest-400 font-medium text-center px-3 sm:px-4 text-xs sm:text-sm md:text-base">
-                        {selectedItem.title}
-                      </span>
+                    <div className="w-full h-80 flex items-center justify-center bg-gradient-to-br from-beige-100 to-beige-200">
+                      <ImageIcon className="w-16 h-16 text-forest-300" />
                     </div>
                   )}
                 </div>
 
                 {/* DESCRIPTION */}
                 <div>
-                  <h3 className="text-xs md:text-sm font-semibold text-forest-700 uppercase tracking-wider mb-2">
+                  <h3 className="text-sm font-semibold text-forest-700 uppercase tracking-wider mb-2">
                     Description
                   </h3>
-                  <p className="text-sm md:text-lg text-forest-600/80 leading-relaxed">
+                  <p className="text-base md:text-lg text-forest-600/80 leading-relaxed">
                     {selectedItem.description}
                   </p>
                 </div>
 
                 {/* DETAILS GRID */}
-                <div className="grid grid-cols-2 gap-4 md:gap-6 pt-3 md:pt-4 border-t border-beige-200">
+                <div className="grid grid-cols-2 gap-6 pt-4 border-t border-beige-200">
                   <div>
-                    <p className="text-[10px] md:text-xs font-semibold text-forest-700 uppercase tracking-wider mb-1 md:mb-2">
+                    <p className="text-xs font-semibold text-forest-700 uppercase tracking-wider mb-1">
                       Product ID
                     </p>
-                    <p className="text-forest-600 font-mono text-xs md:text-sm">
+                    <p className="text-forest-600 font-mono text-sm">
                       {selectedItem.id}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] md:text-xs font-semibold text-forest-700 uppercase tracking-wider mb-1 md:mb-2">
+                    <p className="text-xs font-semibold text-forest-700 uppercase tracking-wider mb-1">
                       Category
                     </p>
-                    <p className="inline-flex items-center gap-1 md:gap-2 bg-gold-600/10 text-gold-700 px-2 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-medium border border-gold-600/20">
+                    <p className="inline-flex items-center gap-2 bg-gold-600/10 text-gold-700 px-3 py-1.5 rounded-full text-sm font-medium border border-gold-600/20">
                       {selectedItem.category}
                     </p>
                   </div>
                 </div>
 
                 {/* ACTION BUTTONS */}
-                <div className="flex gap-2 md:gap-3 pt-2 md:pt-3 border-t border-beige-200">
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-beige-200">
                   <button
                     onClick={() => setSelectedItem(null)}
-                    className="flex-1 bg-beige-100 text-forest-700 font-semibold py-2 md:py-3 rounded-btn hover:bg-beige-200 transition-colors text-sm md:text-base"
+                    className="flex-1 bg-beige-100 text-forest-700 font-semibold py-3 rounded-xl hover:bg-beige-200 transition-colors"
                   >
                     Close
                   </button>
-                  <button className="flex-1 btn-primary text-sm md:text-base py-2 md:py-3">
+                  <button className="flex-1 btn-primary py-3 rounded-xl">
                     Request Quote
                   </button>
                 </div>
