@@ -6,7 +6,6 @@ import {
   Mail, Phone, MapPin, Clock, Quote, Star, Briefcase, GraduationCap
 } from 'lucide-react';
 import SEO from '../components/ui/SEO';
-import PlaceholderImage from '../components/ui/PlaceholderImage';
 import PageHero from '../components/sections/PageHero';
 
 const fadeInUp = {
@@ -131,7 +130,7 @@ const timeline = [
   },
 ];
 
-// Leadership Team Data with image paths from public folder
+// Leadership Team Data with images
 const leadershipTeam = [
   {
     id: 1,
@@ -146,6 +145,7 @@ const leadershipTeam = [
   {
     id: 2,
     
+   
     image: '/saba.jpeg',
     icon: TrendingUp,
     bio: 'Strategic leader driving Woodex Mumbai\'s growth as a premier sustainable gifting brand. Expert in corporate partnerships and brand development with a passion for environmental stewardship.',
@@ -155,7 +155,7 @@ const leadershipTeam = [
   },
   {
     id: 3,
-    
+   
     image: '/zuhaib.jpeg',
     icon: Lightbulb,
     bio: 'Award-winning designer specializing in sustainable product innovation. Transforms raw wood and bamboo into elegant corporate gifts that blend functionality with aesthetic brilliance.',
@@ -165,7 +165,7 @@ const leadershipTeam = [
   },
 ];
 
-// Profile Card Component with fully responsive photo
+// Profile Card Component with images
 interface ProfileCardProps {
   member: typeof leadershipTeam[0];
   index: number;
@@ -173,37 +173,28 @@ interface ProfileCardProps {
 
 function ProfileCard({ member, index }: ProfileCardProps) {
   const [imageError, setImageError] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const Icon = member.icon;
-  const colors = [
-    'from-amber-500 to-amber-600',
-    'from-amber-600 to-amber-700',
-    'from-amber-500 to-amber-600'
-  ];
-  const colorScheme = colors[index % colors.length];
 
   return (
     <motion.div
       variants={stagger}
       transition={{ delay: index * 0.1, duration: 0.5 }}
       className="relative group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col">
-        {/* Profile Image Area - Fully responsive with proper aspect ratio */}
+        {/* Profile Image */}
         <div className="relative w-full bg-gradient-to-br from-gray-800 to-gray-900" style={{ aspectRatio: '3/4' }}>
           {!imageError ? (
             <img
               src={member.image}
-              
+             
               className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
               onError={() => setImageError(true)}
               loading="lazy"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
-            // Professional fallback avatar when image not found
+            // Fallback when image not found
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-amber-600 to-amber-700 p-4">
               <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-4 border-white/40 mb-3 md:mb-4">
                 <Icon className="w-10 h-10 md:w-12 md:h-12 text-white" />
@@ -214,17 +205,18 @@ function ProfileCard({ member, index }: ProfileCardProps) {
             </div>
           )}
           
-          {/* Gradient overlay for better text readability - only visible on hover */}
+          {/* Gradient overlay for better text readability - visible on hover */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           
           {/* Name and position overlay at bottom of image - appears on hover */}
           {!imageError && (
             <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 bg-gradient-to-t from-black/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
-             </div>
+            
+            </div>
           )}
         </div>
 
-        {/* Content Section - Responsive padding */}
+        {/* Content Section */}
         <div className="p-4 md:p-6 flex-1 flex flex-col">
           {/* Name and Designation always visible below image */}
           {!imageError && (
@@ -255,7 +247,7 @@ function ProfileCard({ member, index }: ProfileCardProps) {
             </div>
           </div>
 
-          {/* Key Achievements - Responsive tags */}
+          {/* Key Achievements */}
           <div className="border-t border-gray-100 pt-3 mt-auto">
             <p className="text-[10px] md:text-xs font-semibold text-amber-600 mb-2">Key Achievements</p>
             <div className="flex flex-wrap gap-1 md:gap-1.5">
@@ -294,79 +286,59 @@ export default function About() {
         breadcrumbs={[{ label: 'About' }]}
       />
 
-      {/* COMPANY STORY - Updated with new description */}
+      {/* COMPANY STORY - Text only */}
       <section className="section-padding bg-white">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
-            <motion.div {...fadeInUp}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-0.5 bg-amber-500" />
-                <span className="text-amber-600 font-semibold text-sm uppercase tracking-wider">Our Story</span>
-              </div>
-              <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-6">
-                About <span className="text-amber-600">Woodex Mumbai</span>
-              </h2>
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4">
-                Woodex Mumbai, a venture of Zak Kreations, is a leading manufacturer and supplier of premium eco-friendly corporate gifting and branding solutions. We specialize in crafting innovative products from wood, bamboo, MDF, and other sustainable materials that combine functionality, elegance, and environmental responsibility.
+          <motion.div {...fadeInUp} className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-0.5 bg-amber-500" />
+              <span className="text-amber-600 font-semibold text-sm uppercase tracking-wider">Our Story</span>
+            </div>
+            <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-6">
+              About <span className="text-amber-600">Woodex Mumbai</span>
+            </h2>
+            <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4">
+              Woodex Mumbai, a venture of Zak Kreations, is a leading manufacturer and supplier of premium eco-friendly corporate gifting and branding solutions. We specialize in crafting innovative products from wood, bamboo, MDF, and other sustainable materials that combine functionality, elegance, and environmental responsibility.
+            </p>
+            <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4">
+              With a strong commitment to sustainability, Woodex Mumbai helps organizations reduce plastic usage by offering customized wooden products designed for corporate gifting, employee engagement, promotional campaigns, events, and brand activations. Our product range includes desk accessories, wooden trophies, plaques, gift hampers, nameplates, office essentials, festive gifts, and personalized branding solutions.
+            </p>
+            <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4">
+              Serving industries such as Pharma, IT, Banking, Manufacturing, Education, and Corporate Enterprises, we focus on delivering high-quality craftsmanship, creative designs, and timely execution. Every product is carefully designed to reflect your brand identity while supporting a greener future.
+            </p>
+            <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
+              At Woodex Mumbai, we believe in the vision of <span className="font-semibold text-amber-600">"Vocal for Local"</span> and <span className="font-semibold text-amber-600">"Say No to Plastic"</span>, creating sustainable alternatives that make a positive impact on businesses, communities, and the environment.
+            </p>
+            <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-4">
+              <p className="text-amber-800 text-sm md:text-base font-medium">
+                Woodex Mumbai – Smart Gifting for a Better Planet
               </p>
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4">
-                With a strong commitment to sustainability, Woodex Mumbai helps organizations reduce plastic usage by offering customized wooden products designed for corporate gifting, employee engagement, promotional campaigns, events, and brand activations. Our product range includes desk accessories, wooden trophies, plaques, gift hampers, nameplates, office essentials, festive gifts, and personalized branding solutions.
-              </p>
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4">
-                Serving industries such as Pharma, IT, Banking, Manufacturing, Education, and Corporate Enterprises, we focus on delivering high-quality craftsmanship, creative designs, and timely execution. Every product is carefully designed to reflect your brand identity while supporting a greener future.
-              </p>
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
-                At Woodex Mumbai, we believe in the vision of <span className="font-semibold text-amber-600">"Vocal for Local"</span> and <span className="font-semibold text-amber-600">"Say No to Plastic"</span>, creating sustainable alternatives that make a positive impact on businesses, communities, and the environment.
-              </p>
-              <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-4">
-                <p className="text-amber-800 text-sm md:text-base font-medium">
-                  Woodex Mumbai – Smart Gifting for a Better Planet
-                </p>
-              </div>
-              <div className="flex gap-4 mt-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-full flex items-center justify-center">
-                    <Award className="w-5 h-5 md:w-6 md:h-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <p className="font-display font-bold text-gray-800 text-sm md:text-base">100+</p>
-                    <p className="text-xs md:text-sm text-gray-500">Corporate Clients</p>
-                  </div>
+            </div>
+            <div className="flex gap-4 mt-6">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-full flex items-center justify-center">
+                  <Award className="w-5 h-5 md:w-6 md:h-6 text-amber-600" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-full flex items-center justify-center">
-                    <Leaf className="w-5 h-5 md:w-6 md:h-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <p className="font-display font-bold text-gray-800 text-sm md:text-base">100%</p>
-                    <p className="text-xs md:text-sm text-gray-500">Sustainable</p>
-                  </div>
+                <div>
+                  <p className="font-display font-bold text-gray-800 text-sm md:text-base">100+</p>
+                  <p className="text-xs md:text-sm text-gray-500">Corporate Clients</p>
                 </div>
               </div>
-            </motion.div>
-
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="order-first lg:order-last">
-              <div className="relative">
-                <div className="bg-gradient-to-br from-amber-100 to-amber-50 rounded-2xl overflow-hidden shadow-xl">
-                  <img 
-                    src="/images/about/woodex-craftsmanship.jpg"
-                    alt="Woodex Mumbai Heritage & Craftsmanship" 
-                    className="w-full h-auto object-cover aspect-[4/3] md:aspect-square"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://placehold.co/600x800/fef3c7/78350f?text=Premium+Wooden+Gifts';
-                    }}
-                  />
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-full flex items-center justify-center">
+                  <Leaf className="w-5 h-5 md:w-6 md:h-6 text-amber-600" />
                 </div>
-                <div className="absolute -bottom-6 -right-6 w-24 h-24 md:w-32 md:h-32 bg-amber-500 rounded-full opacity-10 hidden lg:block" />
-                <div className="absolute -top-6 -left-6 w-20 h-20 md:w-24 md:h-24 bg-amber-400 rounded-full opacity-10 hidden lg:block" />
+                <div>
+                  <p className="font-display font-bold text-gray-800 text-sm md:text-base">100%</p>
+                  <p className="text-xs md:text-sm text-gray-500">Sustainable</p>
+                </div>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* LEADERSHIP TEAM SECTION - Professional Profile Cards with Photos */}
+      {/* LEADERSHIP TEAM SECTION - With Images */}
       <section className="section-padding bg-gradient-to-b from-gray-50 to-white">
         <div className="container-luxury">
           <motion.div className="text-center mb-10 md:mb-14" {...fadeInUp}>
@@ -465,119 +437,87 @@ export default function About() {
         </div>
       </section>
 
-      {/* SUSTAINABILITY COMMITMENT */}
+      {/* SUSTAINABILITY COMMITMENT - Text only */}
       <section className="section-padding bg-white">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
-            <motion.div {...fadeInUp} className="order-last lg:order-first">
-              <div className="bg-gradient-to-br from-green-100 to-emerald-50 rounded-xl md:rounded-2xl overflow-hidden shadow-lg">
-                <img 
-                  src="/images/about/sustainable-manufacturing.jpg"
-                  alt="Sustainable Manufacturing & Green Initiative" 
-                  className="w-full h-auto object-cover aspect-[4/3]"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'https://placehold.co/600x450/d1fae5/065f46?text=Eco-Friendly+Production';
-                  }}
-                />
-              </div>
-            </motion.div>
+          <motion.div {...fadeInUp} className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-0.5 bg-amber-500" />
+              <span className="text-amber-600 font-semibold text-xs md:text-sm uppercase tracking-wider">Sustainability</span>
+            </div>
+            <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-6">
+              Our Commitment to <span className="text-amber-600">The Planet</span>
+            </h2>
 
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-0.5 bg-amber-500" />
-                <span className="text-amber-600 font-semibold text-xs md:text-sm uppercase tracking-wider">Sustainability</span>
+            <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+              <div className="flex gap-3 md:gap-4">
+                <Leaf className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">100% Sustainably Sourced Materials</h3>
+                  <p className="text-gray-500 text-xs md:text-sm">All wood and bamboo sourced from certified sustainable forests with proper forest management practices.</p>
+                </div>
               </div>
-              <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-6">
-                Our Commitment to <span className="text-amber-600">The Planet</span>
-              </h2>
+              <div className="flex gap-3 md:gap-4">
+                <Shield className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">Eco-Friendly Manufacturing</h3>
+                  <p className="text-gray-500 text-xs md:text-sm">Zero-waste production processes with water-efficient systems and renewable energy usage in our facilities.</p>
+                </div>
+              </div>
+              <div className="flex gap-3 md:gap-4">
+                <Package className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">Plastic-Free Packaging</h3>
+                  <p className="text-gray-500 text-xs md:text-sm">All packaging uses recyclable, biodegradable materials. We've eliminated single-use plastics completely.</p>
+                </div>
+              </div>
+              <div className="flex gap-3 md:gap-4">
+                <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">Carbon Neutral Operations</h3>
+                  <p className="text-gray-500 text-xs md:text-sm">We offset our carbon footprint through reforestation initiatives and renewable energy investments.</p>
+                </div>
+              </div>
+            </div>
 
-              <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-                <div className="flex gap-3 md:gap-4">
-                  <Leaf className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">100% Sustainably Sourced Materials</h3>
-                    <p className="text-gray-500 text-xs md:text-sm">All wood and bamboo sourced from certified sustainable forests with proper forest management practices.</p>
-                  </div>
-                </div>
-                <div className="flex gap-3 md:gap-4">
-                  <Shield className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">Eco-Friendly Manufacturing</h3>
-                    <p className="text-gray-500 text-xs md:text-sm">Zero-waste production processes with water-efficient systems and renewable energy usage in our facilities.</p>
-                  </div>
-                </div>
-                <div className="flex gap-3 md:gap-4">
-                  <Package className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">Plastic-Free Packaging</h3>
-                    <p className="text-gray-500 text-xs md:text-sm">All packaging uses recyclable, biodegradable materials. We've eliminated single-use plastics completely.</p>
-                  </div>
-                </div>
-                <div className="flex gap-3 md:gap-4">
-                  <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-amber-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-gray-800 text-sm md:text-base mb-1">Carbon Neutral Operations</h3>
-                    <p className="text-gray-500 text-xs md:text-sm">We offset our carbon footprint through reforestation initiatives and renewable energy investments.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-amber-50 border border-amber-200 rounded-lg md:rounded-xl p-4 md:p-6">
-                <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                  <span className="font-display font-semibold text-amber-700">For every product sold,</span> we plant a tree in partnership with environmental organizations, ensuring our growth contributes to a greener India.
-                </p>
-              </div>
-            </motion.div>
-          </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg md:rounded-xl p-4 md:p-6">
+              <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                <span className="font-display font-semibold text-amber-700">For every product sold,</span> we plant a tree in partnership with environmental organizations, ensuring our growth contributes to a greener India.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* MAKE IN INDIA */}
+      {/* MAKE IN INDIA - Text only */}
       <section className="section-padding bg-gray-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/wood-pattern.png')] opacity-5" />
         <div className="container-luxury relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
-            <motion.div {...fadeInUp}>
-              <span className="text-amber-400 font-semibold text-xs md:text-sm uppercase tracking-wider">Made In India</span>
-              <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white mt-3 mb-6">
-                Proudly Supporting <span className="text-amber-400">Indian Craftsmanship</span>
-              </h2>
-              <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4">
-                Woodex Mumbai is a proud flag-bearer of the Make In India initiative. Our commitment to local sourcing and artisan support isn't just a business strategy—it's a moral obligation to the communities that make us.
-              </p>
-              <p className="text-white/80 text-sm md:text-base leading-relaxed mb-6">
-                We employ skilled Indian craftsmen, source materials from local suppliers, and contribute to the growth of India's manufacturing ecosystem. Every product is a testament to the quality and creativity of Indian artisans.
-              </p>
+          <motion.div {...fadeInUp} className="max-w-4xl mx-auto">
+            <span className="text-amber-400 font-semibold text-xs md:text-sm uppercase tracking-wider">Made In India</span>
+            <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white mt-3 mb-6">
+              Proudly Supporting <span className="text-amber-400">Indian Craftsmanship</span>
+            </h2>
+            <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4">
+              Woodex Mumbai is a proud flag-bearer of the Make In India initiative. Our commitment to local sourcing and artisan support isn't just a business strategy—it's a moral obligation to the communities that make us.
+            </p>
+            <p className="text-white/80 text-sm md:text-base leading-relaxed mb-6">
+              We employ skilled Indian craftsmen, source materials from local suppliers, and contribute to the growth of India's manufacturing ecosystem. Every product is a testament to the quality and creativity of Indian artisans.
+            </p>
 
-              <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
-                <div className="bg-white/5 border border-white/10 rounded-lg md:rounded-xl p-4 md:p-6">
-                  <Building2 className="w-6 h-6 md:w-8 md:h-8 text-amber-400 mb-2 md:mb-3" />
-                  <p className="font-display font-semibold text-white text-sm md:text-base mb-1">Local Manufacturing</p>
-                  <p className="text-white/60 text-xs md:text-sm">100% production in India with state-of-the-art facilities</p>
-                </div>
-                <div className="bg-white/5 border border-white/10 rounded-lg md:rounded-xl p-4 md:p-6">
-                  <Users className="w-6 h-6 md:w-8 md:h-8 text-amber-400 mb-2 md:mb-3" />
-                  <p className="font-display font-semibold text-white text-sm md:text-base mb-1">Artisan Employment</p>
-                  <p className="text-white/60 text-xs md:text-sm">Fair wages and benefits for 50+ skilled craftspeople</p>
-                </div>
+            <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
+              <div className="bg-white/5 border border-white/10 rounded-lg md:rounded-xl p-4 md:p-6">
+                <Building2 className="w-6 h-6 md:w-8 md:h-8 text-amber-400 mb-2 md:mb-3" />
+                <p className="font-display font-semibold text-white text-sm md:text-base mb-1">Local Manufacturing</p>
+                <p className="text-white/60 text-xs md:text-sm">100% production in India with state-of-the-art facilities</p>
               </div>
-            </motion.div>
-
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="order-first lg:order-last">
-              <div className="bg-gradient-to-br from-amber-800/20 to-gray-800 rounded-xl md:rounded-2xl overflow-hidden shadow-xl">
-                <img 
-                  src="/images/about/indian-artisans.jpg"
-                  alt="Indian Artisans at Work - Make In India" 
-                  className="w-full h-auto object-cover aspect-[4/3]"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'https://placehold.co/600x450/111827/fbbf24?text=Craftsmanship+Excellence';
-                  }}
-                />
+              <div className="bg-white/5 border border-white/10 rounded-lg md:rounded-xl p-4 md:p-6">
+                <Users className="w-6 h-6 md:w-8 md:h-8 text-amber-400 mb-2 md:mb-3" />
+                <p className="font-display font-semibold text-white text-sm md:text-base mb-1">Artisan Employment</p>
+                <p className="text-white/60 text-xs md:text-sm">Fair wages and benefits for 50+ skilled craftspeople</p>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -636,7 +576,7 @@ export default function About() {
             <div className="w-20 h-0.5 md:w-24 bg-gradient-to-r from-amber-500 to-amber-300 mx-auto mt-6" />
           </motion.div>
 
-          <div className="relative">
+          <div className="relative max-w-4xl mx-auto">
             <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-amber-500 via-amber-400 to-amber-500" />
 
             <div className="space-y-6 md:space-y-8">

@@ -326,7 +326,7 @@ const GALLERY_DATA: GalleryItem[] = [
     title: 'Premium Diwali Gift Set',
     category: 'DIWALI HAMPER',
     description: 'Premium hamper with assorted luxury gifts.',
-    image: '/PRODUCT CATEGORY/DIWALI HAMPER/1000119453-removebg-preview.jpg'
+    image: '/PRODUCT CATEGORY/DIWALI HAMPER/1000119453-removebg-preview.png'
   },
   {
     id: 'dh-3',
@@ -347,7 +347,7 @@ const GALLERY_DATA: GalleryItem[] = [
     title: 'Signature Celebration Hamper',
     category: 'DIWALI HAMPER',
     description: 'Signature collection with premium packaging and gifts.',
-    image: '/PRODUCT CATEGORY/DIWALI HAMPER/1000118698-removebg-preview.jpg'
+    image: '/PRODUCT CATEGORY/DIWALI HAMPER/1000118698-removebg-preview.png'
   },
 
   // ===== 10. DR IN OUT =====
@@ -430,35 +430,35 @@ const GALLERY_DATA: GalleryItem[] = [
     title: 'Classic Key Chain',
     category: 'KEY CHAIN',
     description: 'Elegant key chain with premium finish.',
-    image: '/PRODUCT CATEGORY/KEY CHAIN/HEART SHAPE/20250505_120558.jpg'
+    image: '/PRODUCT CATEGORY/Key Chain/HEART SHAPE/20250505_120558.jpg'
   },
   {
     id: 'kc-2',
     title: 'Premium Leather Key Chain',
     category: 'KEY CHAIN',
     description: 'Premium key chain with genuine leather strap.',
-    image: '/PRODUCT CATEGORY/KEY CHAIN/20260211_145342.jpg'
+    image: '/PRODUCT CATEGORY/Key Chain/20260211_145342.jpg'
   },
   {
     id: 'kc-3',
     title: 'Deluxe Key Chain Set',
     category: 'KEY CHAIN',
     description: 'Deluxe set with multiple key chains.',
-    image: '/PRODUCT CATEGORY/KEY CHAIN/HEART SHAPE/20250505_123756.jpg'
+    image: '/PRODUCT CATEGORY/Key Chain/HEART SHAPE/20250505_123756.jpg'
   },
   {
     id: 'kc-4',
     title: 'Executive Key Chain',
     category: 'KEY CHAIN',
     description: 'Executive series with premium metal finish.',
-    image: '/PRODUCT CATEGORY/KEY CHAIN/HEART SHAPE/20250505_123840.jpg'
+    image: '/PRODUCT CATEGORY/Key Chain/HEART SHAPE/20250505_123840.jpg'
   },
   {
     id: 'kc-5',
     title: 'Signature Key Chain',
     category: 'KEY CHAIN',
     description: 'Signature collection with unique design.',
-    image: '/PRODUCT CATEGORY/KEY CHAIN/HEART SHAPE/20250505_123130.jpg'
+    image: '/PRODUCT CATEGORY/Key Chain/HEART SHAPE/20250505_123130.jpg'
   },
 
   // ===== 13. KEY HANGER =====
@@ -649,35 +649,35 @@ const GALLERY_DATA: GalleryItem[] = [
     title: 'Classic Pen & Phone Stand',
     category: 'PEN HOLDER & MOBILE STAND',
     description: 'Elegant pen holder with mobile stand.',
-    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/IMG_20230312_173520.jpg'
+    image: '/PRODUCT CATEGORY/pen holder & mobile stand/IMG_20230312_173520.jpg'
   },
   {
     id: 'phms-2',
     title: 'Premium Wooden Stand',
     category: 'PEN HOLDER & MOBILE STAND',
     description: 'Premium pen holder with wooden finish and mobile stand.',
-    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/IMG_20230312_173810.jpg'
+    image: '/PRODUCT CATEGORY/pen holder & mobile stand/IMG_20230312_173810.jpg'
   },
   {
     id: 'phms-3',
     title: 'Deluxe Desk Stand',
     category: 'PEN HOLDER & MOBILE STAND',
     description: 'Deluxe stand with multiple compartments.',
-    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/IMG_20230312_173640.jpg'
+    image: '/PRODUCT CATEGORY/pen holder & mobile stand/IMG_20230312_173640.jpg'
   },
   {
     id: 'phms-4',
     title: 'Executive Stand Set',
     category: 'PEN HOLDER & MOBILE STAND',
     description: 'Executive series with premium features.',
-    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/IMG_20230312_174313.jpg'
+    image: '/PRODUCT CATEGORY/pen holder & mobile stand/IMG_20230312_174313.jpg'
   },
   {
     id: 'phms-5',
     title: 'Signature Collection Stand',
     category: 'PEN HOLDER & MOBILE STAND',
     description: 'Signature collection with unique design.',
-    image: '/PRODUCT CATEGORY/PEN HOLDER & MOBILE STAND/IMG_20230312_174452.jpg'
+    image: '/PRODUCT CATEGORY/pen holder & mobile stand/IMG_20230312_174452.jpg'
   },
 
   // ===== 20. PEN STAND =====
@@ -758,35 +758,35 @@ const GALLERY_DATA: GalleryItem[] = [
     title: 'Classic Pen & Card Holder',
     category: 'PEN STAND WITH CARD HOLDER',
     description: 'Elegant pen stand with visiting card holder.',
-    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/IMG_20230311_200810.jpg'
+    image: '/PRODUCT CATEGORY/pen stand WITH card holder/IMG_20230311_200810.jpg'
   },
   {
     id: 'pswch-2',
     title: 'Premium Desk Set',
     category: 'PEN STAND WITH CARD HOLDER',
     description: 'Premium set with card holder slot.',
-    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/IMG_20230311_200827.jpg'
+    image: '/PRODUCT CATEGORY/pen stand WITH card holder/IMG_20230311_200827.jpg'
   },
   {
     id: 'pswch-3',
     title: 'Deluxe Organiser Set',
     category: 'PEN STAND WITH CARD HOLDER',
     description: 'Deluxe set with multiple compartments.',
-    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/IMG_20230311_203124.jpg'
+    image: '/PRODUCT CATEGORY/pen stand WITH card holder/IMG_20230311_203124.jpg'
   },
   {
     id: 'pswch-4',
     title: 'Executive Desk Set',
     category: 'PEN STAND WITH CARD HOLDER',
     description: 'Executive series with premium design.',
-    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/IMG_20230311_222418.jpg'
+    image: '/PRODUCT CATEGORY/pen stand WITH card holder/IMG_20230311_222418.jpg'
   },
   {
     id: 'pswch-5',
     title: 'Signature Collection Set',
     category: 'PEN STAND WITH CARD HOLDER',
     description: 'Signature collection with unique design.',
-    image: '/PRODUCT CATEGORY/PEN STAND WITH CARD HOLDER/IMG_20230312_161855.jpg'
+    image: '/PRODUCT CATEGORY/pen stand WITH card holder/IMG_20230312_161855.jpg'
   },
 
   // ===== 22. PHONE STAND =====
@@ -1153,7 +1153,7 @@ const GALLERY_DATA: GalleryItem[] = [
     title: 'Deluxe Storage Box',
     category: 'WOODEN BOX',
     description: 'Deluxe box with premium finish.',
-    image: '/PRODUCT CATEGORY/WOODEN BOX/20260210_163134jpg'
+    image: '/PRODUCT CATEGORY/WOODEN BOX/20260211_141749jpg'
   },
   {
     id: 'wbox-4',

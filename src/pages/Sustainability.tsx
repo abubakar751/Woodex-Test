@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import PageHero from '../components/sections/PageHero';
-import PlaceholderImage from '../components/ui/PlaceholderImage';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -180,47 +179,41 @@ export default function Sustainability() {
       {/* SUSTAINABILITY MISSION */}
       <section className="section-padding bg-white">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div {...fadeInUp}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="gold-divider-left" />
-                <span className="text-gold-600 font-semibold text-sm uppercase tracking-wider">Our Commitment</span>
-              </div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-forest-800 mb-6">
-                Sustainable Luxury is <span className="text-gradient-gold">Our Promise</span>
-              </h2>
-              <p className="text-forest-600/80 leading-relaxed mb-4">
-                At Woodex Mumbai, sustainability isn't a marketing buzzword—it's the foundation of everything we do. Every product, every process, and every decision is guided by our commitment to environmental responsibility and ethical practices.
-              </p>
-              <p className="text-forest-600/80 leading-relaxed mb-4">
-                We believe that luxury and sustainability can coexist beautifully. Our premium eco-friendly corporate gifts prove that you don't have to choose between elegance and environmental consciousness. When you choose Woodex Mumbai, you're choosing to make a positive impact.
-              </p>
-              <p className="text-forest-600/80 leading-relaxed mb-6">
-                From sourcing to shipping, every aspect of our business is designed to minimize environmental impact while maximizing positive change. We measure our success not just in products delivered, but in trees planted, waste eliminated, and lives improved.
-              </p>
+          <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="gold-divider-left" />
+              <span className="text-gold-600 font-semibold text-sm uppercase tracking-wider">Our Commitment</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-forest-800 mb-6">
+              Sustainable Luxury is <span className="text-gradient-gold">Our Promise</span>
+            </h2>
+            <p className="text-forest-600/80 leading-relaxed mb-4">
+              At Woodex Mumbai, sustainability isn't a marketing buzzword—it's the foundation of everything we do. Every product, every process, and every decision is guided by our commitment to environmental responsibility and ethical practices.
+            </p>
+            <p className="text-forest-600/80 leading-relaxed mb-4">
+              We believe that luxury and sustainability can coexist beautifully. Our premium eco-friendly corporate gifts prove that you don't have to choose between elegance and environmental consciousness. When you choose Woodex Mumbai, you're choosing to make a positive impact.
+            </p>
+            <p className="text-forest-600/80 leading-relaxed mb-6">
+              From sourcing to shipping, every aspect of our business is designed to minimize environmental impact while maximizing positive change. We measure our success not just in products delivered, but in trees planted, waste eliminated, and lives improved.
+            </p>
 
-              <div className="flex gap-6">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-gold-600 shrink-0 mt-1" />
-                  <div>
-                    <p className="font-display font-semibold text-forest-800">100% Sustainable</p>
-                    <p className="text-sm text-forest-500 mt-1">All products eco-certified</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-gold-600 shrink-0 mt-1" />
-                  <div>
-                    <p className="font-display font-semibold text-forest-800">Zero Waste</p>
-                    <p className="text-sm text-forest-500 mt-1">Manufacturing process</p>
-                  </div>
+            <div className="flex gap-6 flex-wrap">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-gold-600 shrink-0 mt-1" />
+                <div>
+                  <p className="font-display font-semibold text-forest-800">100% Sustainable</p>
+                  <p className="text-sm text-forest-500 mt-1">All products eco-certified</p>
                 </div>
               </div>
-            </motion.div>
-
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
-              <PlaceholderImage text="Sustainable Manufacturing - Green Initiatives" aspect="aspect-[4/3]" className="w-full rounded-card" />
-            </motion.div>
-          </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-gold-600 shrink-0 mt-1" />
+                <div>
+                  <p className="font-display font-semibold text-forest-800">Zero Waste</p>
+                  <p className="text-sm text-forest-500 mt-1">Manufacturing process</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -285,118 +278,106 @@ export default function Sustainability() {
       {/* WOODEN PRODUCTS SUSTAINABILITY */}
       <section className="section-padding bg-white">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div {...fadeInUp}>
-              <PlaceholderImage text="Wooden Products - Sustainable Craftsmanship" aspect="aspect-[4/3]" className="w-full rounded-card" />
-            </motion.div>
+          <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
+            <div className="flex items-center gap-3 mb-4">
+              <Leaf className="w-6 h-6 text-gold-600" />
+              <span className="text-gold-600 font-semibold text-sm uppercase tracking-wider">Wooden Products</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-forest-800 mb-6">
+              Crafted from Nature's <span className="text-gradient-gold">Finest Resources</span>
+            </h2>
 
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
-              <div className="flex items-center gap-3 mb-4">
-                <Leaf className="w-6 h-6 text-gold-600" />
-                <span className="text-gold-600 font-semibold text-sm uppercase tracking-wider">Wooden Products</span>
-              </div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-forest-800 mb-6">
-                Crafted from Nature's <span className="text-gradient-gold">Finest Resources</span>
-              </h2>
-
-              <div className="space-y-5 mb-8">
-                <div className="flex gap-4">
-                  <Target className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">FSC Certified Sourcing</h3>
-                    <p className="text-forest-600/70 text-sm">Every piece of wood is sourced from FSC-certified sustainable forests that practice responsible forest management and protect biodiversity.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <Shield className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">Chemical-Free Processing</h3>
-                    <p className="text-forest-600/70 text-sm">We use zero harmful chemicals in wood treatment. Our natural finishing processes preserve wood's integrity while being completely safe for users and environment.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <TrendingUp className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">Full Lifecycle Value</h3>
-                    <p className="text-forest-600/70 text-sm">Wooden products last decades, reducing need for replacements. At end of life, they biodegrade completely, returning nutrients to soil.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <Zap className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">Carbon Neutral Production</h3>
-                    <p className="text-forest-600/70 text-sm">Our manufacturing uses renewable energy, and for every tree harvested, we plant five new ones, creating a positive carbon cycle.</p>
-                  </div>
+            <div className="space-y-5 mb-8">
+              <div className="flex gap-4">
+                <Target className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">FSC Certified Sourcing</h3>
+                  <p className="text-forest-600/70 text-sm">Every piece of wood is sourced from FSC-certified sustainable forests that practice responsible forest management and protect biodiversity.</p>
                 </div>
               </div>
-
-              <div className="bg-gold-500/5 border border-gold-200/30 rounded-card p-6">
-                <p className="text-forest-700 font-display font-semibold mb-2">Impact Per Product:</p>
-                <p className="text-forest-600/80 leading-relaxed">
-                  Each wooden gift prevents approximately 5 plastic products from being manufactured, saving resources and reducing landfill waste significantly.
-                </p>
+              <div className="flex gap-4">
+                <Shield className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">Chemical-Free Processing</h3>
+                  <p className="text-forest-600/70 text-sm">We use zero harmful chemicals in wood treatment. Our natural finishing processes preserve wood's integrity while being completely safe for users and environment.</p>
+                </div>
               </div>
-            </motion.div>
-          </div>
+              <div className="flex gap-4">
+                <TrendingUp className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">Full Lifecycle Value</h3>
+                  <p className="text-forest-600/70 text-sm">Wooden products last decades, reducing need for replacements. At end of life, they biodegrade completely, returning nutrients to soil.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <Zap className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">Carbon Neutral Production</h3>
+                  <p className="text-forest-600/70 text-sm">Our manufacturing uses renewable energy, and for every tree harvested, we plant five new ones, creating a positive carbon cycle.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gold-500/5 border border-gold-200/30 rounded-card p-6">
+              <p className="text-forest-700 font-display font-semibold mb-2">Impact Per Product:</p>
+              <p className="text-forest-600/80 leading-relaxed">
+                Each wooden gift prevents approximately 5 plastic products from being manufactured, saving resources and reducing landfill waste significantly.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* BAMBOO PRODUCTS SUSTAINABILITY */}
       <section className="section-padding bg-beige-50">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div {...fadeInUp} className="order-2 lg:order-1">
-              <div className="flex items-center gap-3 mb-4">
-                <TreePine className="w-6 h-6 text-gold-600" />
-                <span className="text-gold-600 font-semibold text-sm uppercase tracking-wider">Bamboo Products</span>
-              </div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-forest-800 mb-6">
-                The Future of Sustainable <span className="text-gradient-gold">Materials</span>
-              </h2>
+          <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
+            <div className="flex items-center gap-3 mb-4">
+              <TreePine className="w-6 h-6 text-gold-600" />
+              <span className="text-gold-600 font-semibold text-sm uppercase tracking-wider">Bamboo Products</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-forest-800 mb-6">
+              The Future of Sustainable <span className="text-gradient-gold">Materials</span>
+            </h2>
 
-              <div className="space-y-5 mb-8">
-                <div className="flex gap-4">
-                  <Eye className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">World's Fastest Growing Plant</h3>
-                    <p className="text-forest-600/70 text-sm">Bamboo grows 3-5 times faster than trees, reaching maturity in just 3-5 years compared to decades for conventional timber.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <Leaf className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">No Pesticides Required</h3>
-                    <p className="text-forest-600/70 text-sm">Bamboo grows naturally without requiring pesticides or chemical fertilizers, maintaining soil health and protecting surrounding ecosystems.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <Globe className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">Biodiversity Enhancement</h3>
-                    <p className="text-forest-600/70 text-sm">Bamboo forests store twice the carbon of equivalent forests and provide habitat for diverse wildlife while preventing soil erosion.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <Award className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-display font-semibold text-forest-800 mb-2">Superior Durability</h3>
-                    <p className="text-forest-600/70 text-sm">Bamboo is harder and more durable than many hardwoods, ensuring products withstand years of daily use without degradation.</p>
-                  </div>
+            <div className="space-y-5 mb-8">
+              <div className="flex gap-4">
+                <Eye className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">World's Fastest Growing Plant</h3>
+                  <p className="text-forest-600/70 text-sm">Bamboo grows 3-5 times faster than trees, reaching maturity in just 3-5 years compared to decades for conventional timber.</p>
                 </div>
               </div>
-
-              <div className="bg-gold-500/5 border border-gold-200/30 rounded-card p-6">
-                <p className="text-forest-700 font-display font-semibold mb-2">Regeneration Advantage:</p>
-                <p className="text-forest-600/80 leading-relaxed">
-                  One bamboo stalk sequesters more carbon than 35 trees. A single bamboo grove removes the same CO₂ as 35 people annually.
-                </p>
+              <div className="flex gap-4">
+                <Leaf className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">No Pesticides Required</h3>
+                  <p className="text-forest-600/70 text-sm">Bamboo grows naturally without requiring pesticides or chemical fertilizers, maintaining soil health and protecting surrounding ecosystems.</p>
+                </div>
               </div>
-            </motion.div>
+              <div className="flex gap-4">
+                <Globe className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">Biodiversity Enhancement</h3>
+                  <p className="text-forest-600/70 text-sm">Bamboo forests store twice the carbon of equivalent forests and provide habitat for diverse wildlife while preventing soil erosion.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <Award className="w-6 h-6 text-gold-600 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-display font-semibold text-forest-800 mb-2">Superior Durability</h3>
+                  <p className="text-forest-600/70 text-sm">Bamboo is harder and more durable than many hardwoods, ensuring products withstand years of daily use without degradation.</p>
+                </div>
+              </div>
+            </div>
 
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="order-1 lg:order-2">
-              <PlaceholderImage text="Bamboo Products - Eco-Sustainable Material" aspect="aspect-[4/3]" className="w-full rounded-card" />
-            </motion.div>
-          </div>
+            <div className="bg-gold-500/5 border border-gold-200/30 rounded-card p-6">
+              <p className="text-forest-700 font-display font-semibold mb-2">Regeneration Advantage:</p>
+              <p className="text-forest-600/80 leading-relaxed">
+                One bamboo stalk sequesters more carbon than 35 trees. A single bamboo grove removes the same CO₂ as 35 people annually.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -414,7 +395,7 @@ export default function Sustainability() {
             <div className="gold-divider mt-6" />
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
             {[
               {
                 title: 'Product Packaging',
@@ -452,7 +433,7 @@ export default function Sustainability() {
             ))}
           </div>
 
-          <motion.div {...fadeInUp} className="bg-forest-700 rounded-card p-8 text-center relative overflow-hidden">
+          <motion.div {...fadeInUp} className="bg-forest-700 rounded-card p-8 text-center relative overflow-hidden max-w-3xl mx-auto">
             <div className="absolute inset-0 bg-wooden-texture opacity-5" />
             <div className="relative z-10">
               <Recycle className="w-12 h-12 text-gold-400 mx-auto mb-4" />
@@ -479,41 +460,35 @@ export default function Sustainability() {
       <section className="section-padding bg-forest-700 relative overflow-hidden">
         <div className="absolute inset-0 bg-wooden-texture opacity-5" />
         <div className="container-luxury relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center mb-12">
-            <motion.div {...fadeInUp}>
-              <span className="text-gold-400 font-semibold text-sm uppercase tracking-wider">Sustainable Packaging</span>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-white mt-3 mb-6">
-                Every Detail <span className="text-gold-400">Considered</span>
-              </h2>
-              <p className="text-white/80 leading-relaxed mb-6">
-                Our commitment to sustainability extends to every element of the packaging experience. From the moment your product leaves our facility to when it reaches your hands, everything is designed with environmental impact in mind.
-              </p>
+          <motion.div {...fadeInUp} className="max-w-3xl mx-auto mb-12">
+            <span className="text-gold-400 font-semibold text-sm uppercase tracking-wider">Sustainable Packaging</span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-white mt-3 mb-6">
+              Every Detail <span className="text-gold-400">Considered</span>
+            </h2>
+            <p className="text-white/80 leading-relaxed mb-6">
+              Our commitment to sustainability extends to every element of the packaging experience. From the moment your product leaves our facility to when it reaches your hands, everything is designed with environmental impact in mind.
+            </p>
 
-              <div className="space-y-4">
-                {[
-                  { label: 'Recyclable Materials', desc: 'All boxes are 100% recycled kraft cardboard' },
-                  { label: 'Compostable Fillers', desc: 'Plant-based packing materials break down in 90 days' },
-                  { label: 'Minimal Ink Use', desc: 'Vegetable-based inks for all printing' },
-                  { label: 'No Plastic Windows', desc: 'Transparent cellulose windows instead of plastic' },
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
-                    <CheckCircle2 className="w-6 h-6 text-gold-400 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-display font-semibold text-white">{item.label}</p>
-                      <p className="text-white/60 text-sm mt-1">{item.desc}</p>
-                    </div>
+            <div className="space-y-4">
+              {[
+                { label: 'Recyclable Materials', desc: 'All boxes are 100% recycled kraft cardboard' },
+                { label: 'Compostable Fillers', desc: 'Plant-based packing materials break down in 90 days' },
+                { label: 'Minimal Ink Use', desc: 'Vegetable-based inks for all printing' },
+                { label: 'No Plastic Windows', desc: 'Transparent cellulose windows instead of plastic' },
+              ].map((item, i) => (
+                <div key={i} className="flex gap-4">
+                  <CheckCircle2 className="w-6 h-6 text-gold-400 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-display font-semibold text-white">{item.label}</p>
+                    <p className="text-white/60 text-sm mt-1">{item.desc}</p>
                   </div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
-              <PlaceholderImage text="Sustainable Packaging Solutions" aspect="aspect-[4/3]" className="w-full rounded-card" />
-            </motion.div>
-          </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
           {/* PACKAGING OPTIONS */}
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
               {
                 title: 'Premium Box',
@@ -560,7 +535,7 @@ export default function Sustainability() {
             <div className="gold-divider mt-6" />
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {reusableGifts.map((gift, i) => (
               <motion.div
                 key={i}
@@ -607,7 +582,7 @@ export default function Sustainability() {
             <div className="gold-divider mt-6" />
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {environmentalBenefits.map((benefit, i) => (
               <motion.div
                 key={i}
@@ -652,7 +627,7 @@ export default function Sustainability() {
             <div className="gold-divider-center mt-6" />
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16 max-w-5xl mx-auto">
             {sustainabilityPillars.map((pillar, i) => (
               <motion.div
                 key={i}
@@ -679,7 +654,7 @@ export default function Sustainability() {
           </div>
 
           {/* ANIMATED COUNTERS */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-8 border-t border-white/10">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-8 border-t border-white/10 max-w-5xl mx-auto">
             <motion.div {...stagger} transition={{ delay: 0.1, duration: 0.5 }} className="text-center">
               <AnimatedCounter end={95} label="Water Recycled" />
             </motion.div>
@@ -710,7 +685,7 @@ export default function Sustainability() {
             <div className="gold-divider mt-6" />
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
               { name: 'FSC Certified', desc: 'Forest Stewardship Council certification for sustainable wood sourcing' },
               { name: 'ISO 14001', desc: 'Environmental management system certification' },
@@ -742,7 +717,7 @@ export default function Sustainability() {
       <section className="section-padding bg-forest-700 relative overflow-hidden">
         <div className="absolute inset-0 bg-wooden-texture opacity-5" />
         <div className="container-luxury relative z-10 text-center">
-          <motion.div {...fadeInUp}>
+          <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <span className="text-gold-400 font-semibold text-sm uppercase tracking-wider">Ready to Make An Impact</span>
             <h2 className="font-display text-3xl md:text-5xl font-bold text-white mt-4 mb-6">
               Choose Sustainable <br />

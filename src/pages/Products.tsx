@@ -4,10 +4,9 @@ import { motion } from 'framer-motion';
 import {
   Gift, LayoutGrid, Sprout, Layers, UserPlus, Calendar,
   Package, Award, Tag, Wand2, ArrowRight, CheckCircle2,
-  Filter, Grid3X3, ListIcon
+  Grid3X3, ListIcon, Truck, Image
 } from 'lucide-react';
 import SEO from '../components/ui/SEO';
-import PlaceholderImage from '../components/ui/PlaceholderImage';
 import PageHero from '../components/sections/PageHero';
 import { productCategories } from '../data/products';
 
@@ -51,7 +50,7 @@ export default function Products() {
       {/* VIEW CONTROLS */}
       <section className="section-padding bg-beige-50 border-b border-beige-200">
         <div className="container-luxury">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-forest-700 font-semibold">
                 Showing <span className="text-gold-600 font-display">{productCategories.length}</span> product categories
@@ -61,6 +60,16 @@ export default function Products() {
               </p>
             </div>
             <div className="flex items-center gap-2">
+              {/* Gallery Button */}
+              <Link
+                to="/gallery"
+                className="px-4 py-2.5 rounded-btn transition-all bg-gold-600 text-white hover:bg-gold-700 flex items-center gap-2 shadow-luxury"
+              >
+                <Image className="w-5 h-5" />
+                <span className="hidden sm:inline font-medium">View Gallery</span>
+                <span className="sm:hidden">Gallery</span>
+              </Link>
+              
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2.5 rounded-btn transition-all ${
@@ -92,16 +101,15 @@ export default function Products() {
       {viewMode === 'grid' && (
         <section className="section-padding bg-white">
           <div className="container-luxury">
-            <div className="space-y-24">
+            <div className="space-y-16">
               {productCategories.map((category, index) => {
                 const Icon = categoryIcons[category.id] || Gift;
                 const isEven = index % 2 === 0;
 
                 return (
                   <motion.section key={category.id} {...fadeInUp} className="relative">
-                    {/* ALTERNATING LAYOUT */}
-                    <div className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${!isEven && 'lg:auto-cols-auto'}`}>
-                      {/* IMAGE SECTION */}
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                      {/* ICON/IMAGE SECTION - Now shows icon instead of image */}
                       <motion.div
                         initial={{ opacity: 0, x: isEven ? -40 : 40 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -110,12 +118,15 @@ export default function Products() {
                         className={isEven ? '' : 'lg:order-2'}
                       >
                         <div className="relative">
-                          <div className="rounded-card overflow-hidden shadow-luxury-lg">
-                            <PlaceholderImage
-                              text={category.name}
-                              aspect="aspect-[4/3]"
-                              className="w-full"
-                            />
+                          <div className="rounded-card overflow-hidden shadow-luxury-lg bg-gradient-to-br from-beige-50 to-gold-50/30 border border-beige-200 p-12 flex items-center justify-center min-h-[300px]">
+                            <div className="text-center">
+                              <div className="w-32 h-32 bg-gold-500/10 rounded-full flex items-center justify-center mx-auto border-4 border-gold-500/20">
+                                <Icon className="w-16 h-16 text-gold-600" />
+                              </div>
+                              <p className="mt-4 text-forest-600/50 font-display font-semibold text-sm">
+                                {category.products.length}+ Products
+                              </p>
+                            </div>
                           </div>
 
                           {/* FLOATING STATS CARD */}
@@ -203,20 +214,29 @@ export default function Products() {
                           </div>
                         </div>
 
-                        {/* CTA BUTTON */}
-                        <Link
-                          to="/request-quote"
-                          className="btn-primary inline-flex items-center gap-2 group"
-                        >
-                          Request Quote
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                        {/* CTA BUTTONS */}
+                        <div className="flex flex-wrap gap-4">
+                          <Link
+                            to="/request-quote"
+                            className="btn-primary inline-flex items-center gap-2 group"
+                          >
+                            Request Quote
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </Link>
+                          <Link
+                            to="/gallery"
+                            className="btn-secondary border-gold-600 text-gold-600 hover:bg-gold-600 hover:text-white inline-flex items-center gap-2 group"
+                          >
+                            <Image className="w-4 h-4" />
+                            View Gallery
+                          </Link>
+                        </div>
                       </motion.div>
                     </div>
 
                     {/* DECORATIVE DIVIDER */}
                     {index < productCategories.length - 1 && (
-                      <div className="mt-24 flex items-center gap-4">
+                      <div className="mt-16 flex items-center gap-4">
                         <div className="flex-1 h-px bg-gradient-to-r from-beige-200 via-gold-200 to-transparent" />
                         <div className="text-gold-600/50">
                           <Package className="w-5 h-5" />
@@ -285,14 +305,23 @@ export default function Products() {
                           )}
                         </div>
 
-                        {/* ACTION */}
-                        <Link
-                          to="/request-quote"
-                          className="inline-flex items-center gap-2 text-gold-600 font-medium text-sm hover:gap-3 transition-all"
-                        >
-                          Request Quote
-                          <ArrowRight className="w-4 h-4" />
-                        </Link>
+                        {/* ACTIONS */}
+                        <div className="flex flex-wrap gap-4">
+                          <Link
+                            to="/request-quote"
+                            className="inline-flex items-center gap-2 text-gold-600 font-medium text-sm hover:gap-3 transition-all"
+                          >
+                            Request Quote
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                          <Link
+                            to="/gallery"
+                            className="inline-flex items-center gap-2 text-forest-500 font-medium text-sm hover:text-gold-600 transition-all"
+                          >
+                            <Image className="w-4 h-4" />
+                            View Gallery
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -388,19 +417,23 @@ export default function Products() {
                 Request a Quote
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
+              <Link to="/gallery" className="btn-secondary border-gold-600 text-gold-600 hover:bg-gold-600 hover:text-white inline-flex items-center gap-2 group">
+                <Image className="w-4 h-4" />
+                View Our Gallery
+              </Link>
               <a
-  href="https://wa.me/919833160655"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="bg-[#25D366] text-white font-semibold px-6 py-3 rounded-btn flex items-center gap-2 hover:bg-[#1DA851] transition-colors shadow-luxury"
->
-  <img 
-    src="/whatsapp-logo.png" 
-    alt="WhatsApp" 
-    className="w-8 h-8 object-contain"
-  /> 
-  WhatsApp Us
-</a>
+                href="https://wa.me/919833160655"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#25D366] text-white font-semibold px-6 py-3 rounded-btn flex items-center gap-2 hover:bg-[#1DA851] transition-colors shadow-luxury"
+              >
+                <img 
+                  src="/whatsapp-logo.png" 
+                  alt="WhatsApp" 
+                  className="w-8 h-8 object-contain"
+                /> 
+                WhatsApp Us
+              </a>
             </div>
           </motion.div>
         </div>
@@ -408,6 +441,3 @@ export default function Products() {
     </>
   );
 }
-
-// Import additional icon
-import { MessageCircle, Truck } from 'lucide-react';

@@ -6,7 +6,6 @@ import {
 } from 'lucide-react';
 import SEO from '../components/ui/SEO';
 import PageHero from '../components/sections/PageHero';
-import PlaceholderImage from '../components/ui/PlaceholderImage';
 import { blogPosts, blogCategories } from '../data/blogs';
 
 const fadeInUp = {
@@ -95,30 +94,15 @@ export default function Blog() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+            className="max-w-3xl mx-auto"
           >
-            {/* Featured Image */}
-            <div className="relative group">
-              <div className="card-luxury overflow-hidden aspect-[4/3]">
-                <PlaceholderImage
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-              </div>
-              <div className="absolute top-6 left-6">
-                <span className="inline-flex items-center gap-2 bg-gold-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                  <Tag className="w-4 h-4" />
-                  Featured
-                </span>
-              </div>
-            </div>
-
             {/* Featured Content */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-6"
+              className="space-y-6 text-center"
             >
               <div>
                 <span className="inline-block px-4 py-2 bg-forest-700/10 text-forest-700 rounded-full text-sm font-semibold mb-4">
@@ -134,7 +118,7 @@ export default function Blog() {
               </p>
 
               {/* Meta Information */}
-              <div className="flex flex-col sm:flex-row gap-6 text-sm text-forest-600 border-t border-b border-gold-200/30 py-6">
+              <div className="flex flex-wrap justify-center gap-6 text-sm text-forest-600 border-t border-b border-gold-200/30 py-6">
                 <div className="flex items-center gap-3">
                   <User className="w-5 h-5 text-gold-600" />
                   <span>{featuredPost.author}</span>
@@ -178,7 +162,7 @@ export default function Blog() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative"
+            className="relative max-w-3xl mx-auto"
           >
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-forest-400" />
             <input
@@ -196,7 +180,7 @@ export default function Blog() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ staggerChildren: 0.05 }}
-            className="flex flex-wrap gap-3"
+            className="flex flex-wrap justify-center gap-3"
           >
             {blogCategories.map((category) => (
               <motion.button
@@ -219,7 +203,7 @@ export default function Blog() {
           </motion.div>
 
           {/* Results Count */}
-          <div className="text-sm text-forest-600/70">
+          <div className="text-center text-sm text-forest-600/70">
             Showing <span className="font-semibold text-forest-700">{paginatedPosts.length}</span> of{' '}
             <span className="font-semibold text-forest-700">{filteredPosts.length}</span> articles
             {searchTerm && (
@@ -231,7 +215,7 @@ export default function Blog() {
         </div>
       </section>
 
-      {/* BLOG POSTS GRID */}
+      {/* BLOG POSTS LIST - TEXT ONLY */}
       <section className="section-padding bg-white">
         <div className="container-luxury">
           {paginatedPosts.length > 0 ? (
@@ -241,78 +225,58 @@ export default function Blog() {
                 initial="initial"
                 whileInView="whileInView"
                 viewport={{ once: true }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                className="max-w-3xl mx-auto space-y-8"
               >
                 {paginatedPosts.map((post) => (
                   <motion.article
                     key={post.id}
                     variants={staggerItem}
-                    className="card-luxury overflow-hidden group h-full flex flex-col"
+                    className="border-b border-beige-200 pb-8 last:border-0 last:pb-0"
                   >
-                    {/* Card Image */}
-                    <div className="relative overflow-hidden aspect-video bg-beige-100">
-                      <PlaceholderImage
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                      {/* Category Badge */}
-                      <div className="absolute top-4 right-4">
-                        <span className="inline-flex items-center gap-1.5 bg-gold-600 text-white px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide">
-                          <Tag className="w-3.5 h-3.5" />
+                    <div className="space-y-4">
+                      {/* Category and Date */}
+                      <div className="flex flex-wrap items-center gap-4 text-sm">
+                        <span className="inline-block px-3 py-1 bg-forest-700/10 text-forest-700 rounded-full text-xs font-semibold">
                           {post.category}
                         </span>
+                        <span className="text-forest-500/60 flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(post.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })}
+                        </span>
+                        <span className="text-forest-500/60 flex items-center gap-2">
+                          <Clock className="w-4 h-4" />
+                          {post.readTime}
+                        </span>
                       </div>
-                    </div>
 
-                    {/* Card Content */}
-                    <div className="p-6 flex flex-col flex-grow space-y-4">
                       {/* Title */}
-                      <h3 className="text-xl font-display font-bold text-forest-900 group-hover:text-gold-600 transition-colors line-clamp-2">
+                      <h3 className="text-2xl md:text-3xl font-display font-bold text-forest-900 hover:text-gold-600 transition-colors">
                         {post.title}
                       </h3>
 
                       {/* Excerpt */}
-                      <p className="text-forest-700/80 text-sm leading-relaxed line-clamp-3 flex-grow">
+                      <p className="text-forest-700/80 leading-relaxed">
                         {post.excerpt}
                       </p>
 
-                      {/* Divider */}
-                      <div className="h-px bg-gradient-to-r from-gold-200/50 to-transparent" />
-
-                      {/* Meta Information */}
-                      <div className="space-y-3 text-sm text-forest-600">
-                        <div className="flex items-center gap-3">
-                          <User className="w-4 h-4 text-gold-600 flex-shrink-0" />
+                      {/* Author and Read More */}
+                      <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+                        <div className="flex items-center gap-3 text-sm text-forest-600">
+                          <User className="w-4 h-4 text-gold-600" />
                           <span className="font-medium">{post.author}</span>
                         </div>
-
-                        <div className="flex items-center justify-between text-xs text-forest-500/70">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-gold-600" />
-                            <span>
-                              {new Date(post.date).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                              })}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-gold-600" />
-                            <span>{post.readTime}</span>
-                          </div>
-                        </div>
+                        <motion.button
+                          whileHover={{ x: 3 }}
+                          className="inline-flex items-center gap-2 text-gold-600 font-semibold text-sm group"
+                        >
+                          Read Full Article
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </motion.button>
                       </div>
-
-                      {/* Read More Link */}
-                      <motion.div
-                        whileHover={{ x: 3 }}
-                        className="flex items-center gap-2 text-gold-600 font-semibold text-sm group/link cursor-pointer pt-2"
-                      >
-                        Read Article
-                        <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                      </motion.div>
                     </div>
                   </motion.article>
                 ))}
@@ -325,7 +289,7 @@ export default function Blog() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.3 }}
-                  className="mt-16 flex items-center justify-center gap-3"
+                  className="mt-16 flex items-center justify-center gap-3 flex-wrap"
                 >
                   {/* Previous Button */}
                   <motion.button
@@ -339,7 +303,7 @@ export default function Blog() {
                   </motion.button>
 
                   {/* Page Numbers */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                       (page) => (
                         <motion.button
@@ -424,7 +388,7 @@ export default function Blog() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center space-y-8"
+            className="text-center space-y-8 max-w-3xl mx-auto"
           >
             <div className="space-y-4">
               <h2 className="text-4xl md:text-5xl font-display font-bold text-white">
